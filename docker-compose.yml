@@ -22,8 +22,8 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=mercure_poc
-      - MYSQL_USER=hubside
-      - MYSQL_PASSWORD=hubside
+      - MYSQL_USER=poc
+      - MYSQL_PASSWORD=poc
     ports:
       - '3306:3306'
   caddy:
