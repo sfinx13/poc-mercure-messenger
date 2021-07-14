@@ -1,0 +1,53 @@
+# docker-compose.yml
+version: "3.7"
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - 8081:80
+    volumes:
+      - .:/application
+      - /application/vendor
+      - ./.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+
+  php:
+    build: ./.docker/php
+    volumes:
+      - .:/application
+
+  database:
+    image: 'mysql:latest'
+    container_name: poc-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=mercure_poc
+      - MYSQL_USER=hubside
+      - MYSQL_PASSWORD=hubside
+    ports:
+      - '3306:3306'
+  caddy:
+    image: dunglas/mercure
+    container_name: poc-mercure-hub
+    restart: unless-stopped
+    environment:
+      # Uncomment the following line to disable HTTPS
+      DEBUG: "debug"
+      SERVER_NAME: '3000:80'
+      MERCURE_PUBLISHER_JWT_KEY: '!ChangeMe!'
+      MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeMe!'
+      MERCURE_JWT_TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdLCJzdWJzY3JpYmUiOlsiKiJdfX0.Xh6y8YQ22OCv3ikYTEgFJH4I9opNv06toUyYlaYKtyA
+      MERCURE_EXTRA_DIRECTIVES: |-
+        anonymous
+    # Uncomment the following line to enable the development mode
+    command: /usr/bin/caddy run -config /etc/caddy/Caddyfile.dev
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:
