@@ -4,7 +4,13 @@ Extract large data in asynchronous way using Messenger and Mercure for live noti
 
 ## Installation
 
-Install mercure hub 
+Install dependencies
+```bash
+composer install
+npm install
+```
+
+Install mercure hub
 ```bash
 docker-compose up -d
 ```
@@ -14,7 +20,7 @@ Start the server in the background
 symfony server:start -d
 ```
 
-For the use case, to get many message, running the messenger worker
+For the use case to export file in async way, running the messenger worker
 ```bash
 bin/console messenger:consume
 ```
