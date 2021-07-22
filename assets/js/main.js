@@ -7,6 +7,7 @@ MERCURE_URL.searchParams.append('topic', `${TOPIC_URL}/notification`);
 MERCURE_URL.searchParams.append('topic', `${TOPIC_URL}/percentage`);
 MERCURE_URL.searchParams.append('topic', `${TOPIC_URL}/counter`);
 MERCURE_URL.searchParams.append('topic', `${TOPIC_URL}/delete`);
+MERCURE_URL.searchParams.append('topic', `${TOPIC_URL}/message`);
 
 const eventSource = new EventSource(MERCURE_URL.toString());
 eventSource.onmessage = result => handle(result);
@@ -131,6 +132,12 @@ function handle(result) {
         const message = data.delete;
         removeTableRows();
         showMessage('success', message, 3000);
+    }
+
+    if (data.hasOwnProperty('message')) {
+        const message = data.message;
+        console.log(message);
+        showMessage('success', message, 5000);
     }
 }
 

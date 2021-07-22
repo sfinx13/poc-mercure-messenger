@@ -33,11 +33,21 @@ bin/console messenger:consume
 ```
 
 ## Configuration 
+
+### env variables
 ```bash
 cp .env.dist .env
 ```
+### JWT(JSON Web Token)
+https://symfony.com/doc/current/mercure.html#configuration
 
+## Command
+
+Send a notification with custom message
+```bash
+bin/console app:send-notification "Add a message"
+```
 
 ## Debugging tool
 
-http://mercure_url/.well-known/mercure/ui/
+http://localhost:9000/.well-known/mercure
