@@ -3,23 +3,18 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class HomeController extends AbstractController
+class FilesController extends AbstractController
 {
     /**
+     * @Route("/", name="get_files")
      *
-     * @Route("/", name="home_page")
-     *
-     * @param ParameterBagInterface $parameterBag
-     * @return Response
-     * @throws \Exception
      */
-    public function home(ParameterBagInterface $parameterBag): Response
+    public function getFiles(): Response
     {
         $csvDir = $this->getParameter('kernel.project_dir') . '/public/csv/';
         $finder = new Finder();
@@ -39,11 +34,8 @@ class HomeController extends AbstractController
                     ];
                 }
             }
-
         }
         return $this->render('home/index.html.twig', [
-            'app_url' => $parameterBag->get('app_url'),
-            'mercure_publish_url' => $parameterBag->get('mercure_publish_url'),
             'files' => $files ?? []
         ]);
     }

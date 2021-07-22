@@ -42,12 +42,6 @@ class ExportController extends AbstractController
     /**
      * @Route("/export", name="export_file")
      *
-     * @param MessageBusInterface $messageBus
-     * @param Request $request
-     * @return JsonResponse
-     * @throws \Doctrine\DBAL\Driver\Exception
-     * @throws \Doctrine\DBAL\Exception
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function export(MessageBusInterface $messageBus,
                            Request $request): JsonResponse

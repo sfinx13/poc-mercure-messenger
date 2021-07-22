@@ -12,8 +12,6 @@ class DownloadController extends AbstractController
     /**
      * @Route("/download/{filename}", name="download")
      *
-     * @param string $filename
-     * @return BinaryFileResponse
      */
     public function download(string $filename): BinaryFileResponse
     {

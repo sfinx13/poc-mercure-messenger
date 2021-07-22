@@ -18,46 +18,23 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class ExportMessageHandler implements MessageHandlerInterface
 {
-
     use LoggerAwareTrait;
 
-    /**
-     * @var ParameterBagInterface
-     */
-    protected $parameterBag;
+    protected ParameterBagInterface $parameterBag;
 
-    /**
-     * @var HubInterface
-     */
-    protected $hub;
+    protected HubInterface $hub;
 
-    /**
-     * @var AdapterInterface
-     */
-    protected $cache;
+    protected AdapterInterface $cache;
 
-
-    /**
-     * ExportMessageHandler constructor.
-     * @param ParameterBagInterface $parameterBag
-     * @param HubInterface $publisher
-     * @param AdapterInterface $cache
-     */
     public function __construct(ParameterBagInterface $parameterBag,
                                 HubInterface $hub,
                                 AdapterInterface $cache)
-
     {
         $this->parameterBag = $parameterBag;
         $this->hub = $hub;
         $this->cache = $cache;
     }
 
-    /**
-     * @param ExportMessage $exportMessage
-     * @throws Exception
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function __invoke(ExportMessage $exportMessage)
     {
         $filesystem = new Filesystem();
@@ -76,7 +53,6 @@ class ExportMessageHandler implements MessageHandlerInterface
         $start = new DateTime();
 
         while (new DateTime() < $stopDate) {
-
             $now = DateTime::createFromFormat('U.u', microtime(true));
 
             if ($now !== false) {
@@ -84,6 +60,7 @@ class ExportMessageHandler implements MessageHandlerInterface
                 $filesystem->appendToFile($csvFile, $line . PHP_EOL);
                 $percentage = (($stopDate->getTimestamp() - (new DateTime())->getTimestamp()) * 100) / ($stopDate->getTimestamp() - $start->getTimestamp());
                 $data = ['percentage' => abs($percentage - 100)];
+
                 $percentageUpdate = new Update($appUrl . '/percentage', json_encode($data));
                 $this->hub->publish($percentageUpdate);
             }
