@@ -10,6 +10,11 @@ composer install
 npm install
 ```
 
+Compile assets
+```bash
+npm run build
+```
+
 Install mercure hub
 ```bash
 docker-compose up -d
