@@ -16,36 +16,25 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ExportController extends AbstractController
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $entityManager;
+    protected EntityManagerInterface $entityManager;
 
-    /**
-     * @var AdapterInterface
-     */
-    protected $cache;
+    protected AdapterInterface $cache;
 
-    /**
-     * ExportController constructor.
-     *
-     * @param EntityManagerInterface $entityManager
-     * @param AdapterInterface $cache
-     */
-    public function __construct(EntityManagerInterface $entityManager,
-                                AdapterInterface $cache)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        AdapterInterface $cache
+    ) {
         $this->entityManager = $entityManager;
         $this->cache = $cache;
     }
 
     /**
      * @Route("/export", name="export_file")
-     *
      */
-    public function export(MessageBusInterface $messageBus,
-                           Request $request): JsonResponse
-    {
+    public function export(
+        MessageBusInterface $messageBus,
+        Request $request
+    ): JsonResponse {
         $this->countMessage();
         $args = $request->query->all();
         $exportMessage = (new ExportMessage())
@@ -57,13 +46,7 @@ class ExportController extends AbstractController
 
         /** @var CacheItemInterface $counter */
         $counter = $this->cache->getItem('counter');
-
-        if (!$counter->isHit()) {
-            $counter->set(1);
-        } else {
-            $counter->set((int)$counter->get() + 1);
-        }
-
+        $counter->set(!$counter->isHit() ? 1 : (int)$counter->get() + 1);
         $this->cache->save($counter);
 
         return $this->json($counter->get(), Response::HTTP_OK);
@@ -71,14 +54,11 @@ class ExportController extends AbstractController
 
     /**
      * @Route("/files", name="remove_files", methods={"DELETE"})
-     *
-     * @param MessageBusInterface $messageBus
-     * @param Request $request
-     * @return JsonResponse
      */
-    public function remove(MessageBusInterface $messageBus,
-                           Request $request): JsonResponse
-    {
+    public function remove(
+        MessageBusInterface $messageBus,
+        Request $request
+    ): JsonResponse {
         $args = $request->query->all();
         $deleteMessage = (new DeleteMessage())->setExtension($args['extension']);
 
@@ -87,11 +67,6 @@ class ExportController extends AbstractController
         return $this->json(null, Response::HTTP_NO_CONTENT);
     }
 
-    /**
-     * @throws \Doctrine\DBAL\Driver\Exception
-     * @throws \Doctrine\DBAL\Exception
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     private function countMessage(): void
     {
         $connection = $this->entityManager->getConnection();

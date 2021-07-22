@@ -12,7 +12,6 @@ class FilesController extends AbstractController
 {
     /**
      * @Route("/", name="get_files")
-     *
      */
     public function getFiles(): Response
     {
@@ -39,5 +38,4 @@ class FilesController extends AbstractController
             'files' => $files ?? []
         ]);
     }
-
 }

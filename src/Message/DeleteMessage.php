@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Message;
-
 
 class DeleteMessage
 {
@@ -18,5 +16,4 @@ class DeleteMessage
         $this->extension = $extension;
         return $this;
     }
-
 }

@@ -26,9 +26,11 @@ class ExportMessageHandler implements MessageHandlerInterface
 
     protected AdapterInterface $cache;
 
-    public function __construct(ParameterBagInterface $parameterBag,
-                                HubInterface $hub,
-                                AdapterInterface $cache)
+    public function __construct(
+        ParameterBagInterface $parameterBag,
+        HubInterface $hub,
+        AdapterInterface $cache
+    )
     {
         $this->parameterBag = $parameterBag;
         $this->hub = $hub;
@@ -86,5 +88,4 @@ class ExportMessageHandler implements MessageHandlerInterface
         $counterUpdate = new Update($appUrl . '/counter', json_encode($data));
         $this->hub->publish($counterUpdate);
     }
-
 }

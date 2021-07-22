@@ -2,7 +2,6 @@
 
 namespace App\Message;
 
-
 class ExportMessage
 {
     protected int $projectId;

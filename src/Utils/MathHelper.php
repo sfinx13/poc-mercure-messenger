@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Utils;
-
 
 class MathHelper
 {

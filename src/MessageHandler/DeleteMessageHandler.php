@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\MessageHandler;
-
 
 use App\Message\DeleteMessage;
 use Psr\Cache\CacheItemInterface;
@@ -30,9 +28,11 @@ class DeleteMessageHandler implements MessageHandlerInterface
      * @param HubInterface $hub
      * @param AdapterInterface $cache
      */
-    public function __construct(ParameterBagInterface $parameterBag,
-                                HubInterface $hub,
-                                AdapterInterface $cache)
+    public function __construct(
+        ParameterBagInterface $parameterBag,
+        HubInterface $hub,
+        AdapterInterface $cache
+    )
     {
         $this->parameterBag = $parameterBag;
         $this->hub = $hub;
