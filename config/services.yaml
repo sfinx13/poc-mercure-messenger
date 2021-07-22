@@ -6,6 +6,7 @@
 parameters:
     mercure_publish_url: '%env(MERCURE_PUBLISH_URL)%'
     app_url: '%env(APP_URL)%'
+    topic_url: '%env(TOPIC_URL)%'
 
 services:
     # default configuration for services in *this* file

@@ -32,8 +32,7 @@ class DeleteMessageHandler implements MessageHandlerInterface
         ParameterBagInterface $parameterBag,
         HubInterface $hub,
         AdapterInterface $cache
-    )
-    {
+    ) {
         $this->parameterBag = $parameterBag;
         $this->hub = $hub;
         $this->cache = $cache;
@@ -45,7 +44,7 @@ class DeleteMessageHandler implements MessageHandlerInterface
      */
     public function __invoke(DeleteMessage $deleteMessage)
     {
-        $appUrl = $this->parameterBag->get('app_url');
+        $topicUrl = $this->parameterBag->get('topic_url');
 
         if ($deleteMessage->getExtension() === 'csv') {
             $csvDir = $this->parameterBag->get('kernel.project_dir') . '/public/csv/';
@@ -54,14 +53,14 @@ class DeleteMessageHandler implements MessageHandlerInterface
                 $filesystem->remove($csvDir);
 
                 $data = ['delete' => 'All files has been deleted'];
-                $deleteUpdate = new Update($appUrl . '/delete', json_encode($data));
+                $deleteUpdate = new Update($topicUrl . '/delete', json_encode($data));
             } else {
                 $data = ['delete' => 'No files to delete'];
-                $deleteUpdate = new Update($appUrl . '/delete', json_encode($data));
+                $deleteUpdate = new Update($topicUrl . '/delete', json_encode($data));
             }
         } else {
             $data = ['delete' => 'Only csv can be deleted'];
-            $deleteUpdate = new Update($appUrl . '/delete', json_encode($data));
+            $deleteUpdate = new Update($topicUrl . '/delete', json_encode($data));
         }
 
         $this->hub->publish($deleteUpdate);
@@ -71,7 +70,7 @@ class DeleteMessageHandler implements MessageHandlerInterface
         $counter->set(0);
         $this->cache->save($counter);
         $data = ['counter' => (int)$counter->get()];
-        $counterUpdate = new Update($appUrl . '/counter', json_encode($data));
+        $counterUpdate = new Update($topicUrl . '/counter', json_encode($data));
 
         $this->hub->publish($counterUpdate);
     }

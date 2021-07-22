@@ -23,7 +23,7 @@ services:
       SERVER_NAME: ':80'
       MERCURE_PUBLISHER_JWT_KEY: '!ChangeMe!'
       MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeMe!'
-      MERCURE_JWT_TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdLCJzdWJzY3JpYmUiOlsiKiJdfX0.Xh6y8YQ22OCv3ikYTEgFJH4I9opNv06toUyYlaYKtyA
+      MERCURE_JWT_TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdLCJzdWJzY3JpYmUiOlsiKiJdfX0.Ws4gtnaPtM-R2-z9DnH-laFu5lDZrMnmyTpfU8uKyQo
       MERCURE_EXTRA_DIRECTIVES: |-
         cors_origins *
         anonymous

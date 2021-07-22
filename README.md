@@ -2,6 +2,8 @@
 
 Extract large data in asynchronous way using Messenger and Mercure for live notification
 
+![Screenshoot](doc/demo_mercure.png)
+
 ## Installation
 
 Install dependencies
@@ -29,3 +31,13 @@ For the use case to export file in async way, running the messenger worker
 ```bash
 bin/console messenger:consume
 ```
+
+## Configuration 
+```bash
+cp .env.dist .env
+```
+
+
+## Debugging tool
+
+http://mercure_url/.well-known/mercure/ui/

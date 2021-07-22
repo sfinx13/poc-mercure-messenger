@@ -1,10 +1,12 @@
 const MERCURE_URL = new URL(process.env.MERCURE_PUBLISH_URL);
+const TOPIC_URL = process.env.TOPIC_URL;
 const APP_URL = process.env.APP_URL;
+console.log(process.env);
 
-MERCURE_URL.searchParams.append('topic', `${APP_URL}/notification`);
-MERCURE_URL.searchParams.append('topic', `${APP_URL}/percentage`);
-MERCURE_URL.searchParams.append('topic', `${APP_URL}/counter`);
-MERCURE_URL.searchParams.append('topic', `${APP_URL}/delete`);
+MERCURE_URL.searchParams.append('topic', `${TOPIC_URL}/notification`);
+MERCURE_URL.searchParams.append('topic', `${TOPIC_URL}/percentage`);
+MERCURE_URL.searchParams.append('topic', `${TOPIC_URL}/counter`);
+MERCURE_URL.searchParams.append('topic', `${TOPIC_URL}/delete`);
 
 const eventSource = new EventSource(MERCURE_URL.toString());
 eventSource.onmessage = result => handle(result);

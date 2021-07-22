@@ -30,8 +30,7 @@ class ExportMessageHandler implements MessageHandlerInterface
         ParameterBagInterface $parameterBag,
         HubInterface $hub,
         AdapterInterface $cache
-    )
-    {
+    ) {
         $this->parameterBag = $parameterBag;
         $this->hub = $hub;
         $this->cache = $cache;
@@ -40,7 +39,7 @@ class ExportMessageHandler implements MessageHandlerInterface
     public function __invoke(ExportMessage $exportMessage)
     {
         $filesystem = new Filesystem();
-        $appUrl = $this->parameterBag->get('app_url');
+        $topicUrl = $this->parameterBag->get('topic_url');
         $csvDir = $this->parameterBag->get('kernel.project_dir') . '/public/csv/';
         $filename = 'export_' . $exportMessage->getProjectId() . '_' . $exportMessage->getStartDate()->getTimestamp() . '.csv';
         $csvFile = $csvDir . $filename;
@@ -63,7 +62,7 @@ class ExportMessageHandler implements MessageHandlerInterface
                 $percentage = (($stopDate->getTimestamp() - (new DateTime())->getTimestamp()) * 100) / ($stopDate->getTimestamp() - $start->getTimestamp());
                 $data = ['percentage' => abs($percentage - 100)];
 
-                $percentageUpdate = new Update($appUrl . '/percentage', json_encode($data));
+                $percentageUpdate = new Update($topicUrl . '/percentage', json_encode($data));
                 $this->hub->publish($percentageUpdate);
             }
         }
@@ -73,7 +72,7 @@ class ExportMessageHandler implements MessageHandlerInterface
             'filename' => $filename,
             'size' => round((new File($csvFile))->getSize() / 1024) . ' Ko'];
 
-        $notificationUpdate = new Update($appUrl . '/notification', json_encode($data));
+        $notificationUpdate = new Update($topicUrl . '/notification', json_encode($data));
         $this->hub->publish($notificationUpdate);
 
         /** @var CacheItemInterface $counter */
@@ -85,7 +84,7 @@ class ExportMessageHandler implements MessageHandlerInterface
 
         $data = ['counter' => (int)$counter->get()];
 
-        $counterUpdate = new Update($appUrl . '/counter', json_encode($data));
+        $counterUpdate = new Update($topicUrl . '/counter', json_encode($data));
         $this->hub->publish($counterUpdate);
     }
 }
