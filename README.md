@@ -4,50 +4,43 @@ Extract large data in asynchronous way using Messenger and Mercure for live noti
 
 ![Screenshoot](doc/demo_mercure.png)
 
-## Installation
-
-Install dependencies
-```bash
-composer install
-npm install
-```
-
-Compile assets
-```bash
-npm run build
-```
-
-Install mercure hub
-```bash
-docker-compose up -d
-```
-
-Start the server in the background
-```bash
-symfony server:start -d
-```
-
-For the use case to export file in async way, running the messenger worker
-```bash
-bin/console messenger:consume
-```
-
-## Configuration 
+## Configuration
 
 ### env variables
 ```bash
 cp .env.dist .env
 ```
+
 ### JWT(JSON Web Token)
 https://symfony.com/doc/current/mercure.html#configuration
 
+## Installation
+
+### Run the app
+```bash
+docker-compose up -d
+```
+
+### Install dependencies
+```bash
+composer install
+npm install
+```
+
+### Compile assets for JS/CSS
+```bash
+npm run build
+```
+
 ## Command
 
-Send a notification with custom message
+Send a notification with random message with option if you want to push more messages
+
+Send 10 notifications
 ```bash
-bin/console app:send-notification "Add a message"
+docker exec -it poc-php-fpm bin/console app:send-notif -i 50
 ```
 
 ## Debugging tool
 
-http://localhost:9000/.well-known/mercure
+http://localhost:9000/.well-known/mercure/ui/

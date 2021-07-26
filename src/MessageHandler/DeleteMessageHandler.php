@@ -11,23 +11,16 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Uid\Uuid;
 
 class DeleteMessageHandler implements MessageHandlerInterface
 {
     use LoggerAwareTrait;
 
     protected ParameterBagInterface $parameterBag;
-
     protected HubInterface $hub;
-
     protected AdapterInterface $cache;
 
-    /**
-     * DeleteMessageHandler constructor.
-     * @param ParameterBagInterface $parameterBag
-     * @param HubInterface $hub
-     * @param AdapterInterface $cache
-     */
     public function __construct(
         ParameterBagInterface $parameterBag,
         HubInterface $hub,
@@ -38,40 +31,32 @@ class DeleteMessageHandler implements MessageHandlerInterface
         $this->cache = $cache;
     }
 
-    /**
-     * @param DeleteMessage $deleteMessage
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
     public function __invoke(DeleteMessage $deleteMessage)
     {
-        $topicUrl = $this->parameterBag->get('topic_url');
-
+        $topicUrl = $this->parameterBag->get('topic_url'). '/files';
         if ($deleteMessage->getExtension() === 'csv') {
             $csvDir = $this->parameterBag->get('kernel.project_dir') . '/public/csv/';
             $filesystem = new Filesystem();
             if ($filesystem->exists($csvDir)) {
                 $filesystem->remove($csvDir);
-
                 $data = ['delete' => 'All files has been deleted'];
-                $deleteUpdate = new Update($topicUrl . '/delete', json_encode($data));
             } else {
                 $data = ['delete' => 'No files to delete'];
-                $deleteUpdate = new Update($topicUrl . '/delete', json_encode($data));
             }
         } else {
             $data = ['delete' => 'Only csv can be deleted'];
-            $deleteUpdate = new Update($topicUrl . '/delete', json_encode($data));
         }
 
+        $deleteUpdate = new Update($topicUrl, json_encode($data), false, Uuid::v1(), 'delete-files');
         $this->hub->publish($deleteUpdate);
 
         /** @var CacheItemInterface $counter */
         $counter = $this->cache->getItem('counter');
         $counter->set(0);
         $this->cache->save($counter);
-        $data = ['counter' => (int)$counter->get()];
-        $counterUpdate = new Update($topicUrl . '/counter', json_encode($data));
 
+        $data = ['counter' => (int)$counter->get()];
+        $counterUpdate = new Update($topicUrl, json_encode($data), false, Uuid::v1(), 'counter');
         $this->hub->publish($counterUpdate);
     }
 }

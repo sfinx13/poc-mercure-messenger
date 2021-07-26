@@ -15,15 +15,14 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Uid\Uuid;
 
 class ExportMessageHandler implements MessageHandlerInterface
 {
     use LoggerAwareTrait;
 
     protected ParameterBagInterface $parameterBag;
-
     protected HubInterface $hub;
-
     protected AdapterInterface $cache;
 
     public function __construct(
@@ -39,7 +38,8 @@ class ExportMessageHandler implements MessageHandlerInterface
     public function __invoke(ExportMessage $exportMessage)
     {
         $filesystem = new Filesystem();
-        $topicUrl = $this->parameterBag->get('topic_url');
+        $topicUrl = $this->parameterBag->get('topic_url').'/files';
+
         $csvDir = $this->parameterBag->get('kernel.project_dir') . '/public/csv/';
         $filename = 'export_' . $exportMessage->getProjectId() . '_' . $exportMessage->getStartDate()->getTimestamp() . '.csv';
         $csvFile = $csvDir . $filename;
@@ -62,7 +62,14 @@ class ExportMessageHandler implements MessageHandlerInterface
                 $percentage = (($stopDate->getTimestamp() - (new DateTime())->getTimestamp()) * 100) / ($stopDate->getTimestamp() - $start->getTimestamp());
                 $data = ['percentage' => abs($percentage - 100)];
 
-                $percentageUpdate = new Update($topicUrl . '/percentage', json_encode($data));
+                $percentageUpdate = new Update(
+                    $topicUrl,
+                    json_encode($data),
+                    false,
+                    Uuid::v1(),
+                    'progress-bar'
+                );
+
                 $this->hub->publish($percentageUpdate);
             }
         }
@@ -72,7 +79,13 @@ class ExportMessageHandler implements MessageHandlerInterface
             'filename' => $filename,
             'size' => round((new File($csvFile))->getSize() / 1024) . ' Ko'];
 
-        $notificationUpdate = new Update($topicUrl . '/notification', json_encode($data));
+        $notificationUpdate = new Update(
+            $topicUrl,
+            json_encode($data),
+            false,
+            Uuid::v1(),
+            'creating-file'
+        );
         $this->hub->publish($notificationUpdate);
 
         /** @var CacheItemInterface $counter */
@@ -84,7 +97,13 @@ class ExportMessageHandler implements MessageHandlerInterface
 
         $data = ['counter' => (int)$counter->get()];
 
-        $counterUpdate = new Update($topicUrl . '/counter', json_encode($data));
+        $counterUpdate = new Update(
+            $topicUrl,
+            json_encode($data),
+            false,
+            Uuid::v1(),
+            'counter'
+        );
         $this->hub->publish($counterUpdate);
     }
 }

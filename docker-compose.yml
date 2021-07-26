@@ -2,16 +2,53 @@
 version: "3.7"
 
 services:
+  php-fpm:
+    build: .docker/php-fpm
+    container_name: poc-php-fpm
+    working_dir: /application
+    environment:
+      DATABASE_URL: "mysql://poc:poc@mysql_db:3306/mercure_poc"
+      MESSENGER_TRANSPORT_DSN: "doctrine://default"
+    volumes:
+      - .:/application/
+    networks:
+      - poc_mercure
+
+  php-worker:
+    build: .docker/php-worker
+    container_name: poc-php-worker
+    working_dir: /application
+    environment:
+      DATABASE_URL: "mysql://poc:poc@mysql_db:3306/mercure_poc"
+      MESSENGER_TRANSPORT_DSN: "doctrine://default"
+    volumes:
+      - .:/application/
+    networks:
+      - poc_mercure
+
+  nginx:
+    build: .docker/nginx
+    container_name: poc-nginx
+    working_dir: /application
+    volumes:
+      - .:/application/
+    ports:
+      - "8080:80"
+    networks:
+      - poc_mercure
+
   mysql_db:
     image: 'mysql:latest'
     container_name: poc-mysql
     environment:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: mercure_poc
-        MYSQL_USER: poc
-        MYSQL_PASSWORD: poc
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mercure_poc
+      MYSQL_USER: poc
+      MYSQL_PASSWORD: poc
     ports:
       - '3306:3306'
+    networks:
+      - poc_mercure
 
   caddy:
     image: dunglas/mercure
@@ -34,7 +71,12 @@ services:
     volumes:
       - caddy_data:/data
       - caddy_config:/config
+    networks:
+      - poc_mercure
 
 volumes:
   caddy_data:
   caddy_config:
+
+networks:
+  poc_mercure:

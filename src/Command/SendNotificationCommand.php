@@ -2,8 +2,8 @@
 
 namespace App\Command;
 
+use Faker\Factory;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\Mercure\Update;
 
 class SendNotificationCommand extends Command
 {
-    protected static $defaultName = 'app:send-notification';
+    protected static $defaultName = 'app:send-notif';
     protected static $defaultDescription = 'Publish a notification';
 
     protected HubInterface $hub;
@@ -34,26 +34,31 @@ class SendNotificationCommand extends Command
     {
         $this
             ->setDescription(self::$defaultDescription)
-            ->addArgument('message', InputArgument::REQUIRED, 'Message to send to application');
+            ->addOption(
+                'iterations',
+                'i',
+                InputOption::VALUE_REQUIRED,
+                'How many times should be published',
+                1
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $message = $input->getArgument('message');
 
-        if ($message) {
-            $io->note(sprintf('You passed an argument: %s', $message));
+        $faker = Factory::create();
+
+        for ($i = 0; $i < $input->getOption('iterations'); $i++) {
+            $messageUpdate = new Update(
+                $this->parameterBag->get('topic_url') . '/message',
+                json_encode(['message' => $faker->text()]),
+                false,
+            );
+            $this->hub->publish($messageUpdate);
         }
 
-        $messageUpdate = new Update(
-            $this->parameterBag->get('topic_url') . '/message',
-            json_encode(['message' => $message])
-        );
-
-        $this->hub->publish($messageUpdate);
-
-        $io->success('Message has been published to the hub');
+        $io->success('Message(s) has/have been published to the hub');
 
         return Command::SUCCESS;
     }

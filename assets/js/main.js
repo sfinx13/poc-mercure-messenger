@@ -1,32 +1,92 @@
-const MERCURE_URL = new URL(process.env.MERCURE_PUBLISH_URL);
 const TOPIC_URL = process.env.TOPIC_URL;
 const APP_URL = process.env.APP_URL;
-console.log(process.env);
+const MERCURE_JWT_TOKEN = process.env.MERCURE_JWT_TOKEN;
 
-MERCURE_URL.searchParams.append('topic', `${TOPIC_URL}/notification`);
-MERCURE_URL.searchParams.append('topic', `${TOPIC_URL}/percentage`);
-MERCURE_URL.searchParams.append('topic', `${TOPIC_URL}/counter`);
-MERCURE_URL.searchParams.append('topic', `${TOPIC_URL}/delete`);
-MERCURE_URL.searchParams.append('topic', `${TOPIC_URL}/message`);
+const SUBSCRIBE_URL = new URL(process.env.MERCURE_HUB_URL);
+SUBSCRIBE_URL.searchParams.append('topic', `${TOPIC_URL}/files`);
+SUBSCRIBE_URL.searchParams.append('topic', `${TOPIC_URL}/message`);
 
-const eventSource = new EventSource(MERCURE_URL.toString());
-eventSource.onmessage = result => handle(result);
+let lastEventID = null;
+(async ()  =>  {
+    const response = await fetch(process.env.MERCURE_HUB_URL + "/subscriptions", {
+        headers: {
+            "Authorization" : "Bearer " + MERCURE_JWT_TOKEN
+        }
+    });
+    const data = await response.json();
+
+    return data.lastEventID;
+
+})().then( data => lastEventID = data.lastEventID);
+
+SUBSCRIBE_URL.searchParams.append('Last-Event-ID', lastEventID);
+
+const eventSource = new EventSource(SUBSCRIBE_URL.toString());
+
+eventSource.addEventListener('delete-files', (messageEvent) => {
+    const data = JSON.parse(messageEvent.data);
+    if (data.hasOwnProperty('delete')) {
+        const message = data.delete;
+        removeTableRows();
+        showMessage('success', message, 3000);
+    }
+})
+
+eventSource.addEventListener('counter', (messageEvent) => {
+    const data = JSON.parse(messageEvent.data);
+    if (data.hasOwnProperty('counter')) {
+        displayCount(data.counter);
+    }
+});
+
+eventSource.addEventListener('progress-bar', (messageEvent) => {
+    const data = JSON.parse(messageEvent.data);
+    if (data.hasOwnProperty('percentage')) {
+        btnDeleteFiles.classList.add('disabled');
+        progressBarPercentage.classList.remove('d-none');
+        const progressBar = document.getElementById("dynamic");
+        const percentage = Math.round(data.percentage);
+        progressBar.setAttribute('style', `width:${percentage}%`);
+        progressBar.setAttribute('aria-valuenow', percentage);
+        progressBar.textContent = `${percentage}% Complete`;
+    }
+})
+
+eventSource.addEventListener('creating-file', (messageEvent) => {
+    const data = JSON.parse(messageEvent.data);
+    if (data.hasOwnProperty('filename')) {
+        const currentDate = new Date().toLocaleString();
+        const message = `Filename ${data.filename} has been created at ${currentDate}`;
+        showMessage('success', message, 3000);
+        addTableRow(data.filename, data.size, currentDate);
+        btnDeleteFiles.classList.remove('disabled')
+    }
+});
+
+eventSource.onmessage = messageEvent => {
+    const data = JSON.parse(messageEvent.data);
+    if (data.hasOwnProperty('message')) {
+        const message = data.message;
+        showMessage('success', message, 5000);
+    }
+};
 eventSource.onerror = () => showMessage(
     'warning',
     'Please start the mercure server to be notified in real-time',
     5000);
 
-let countClick = 0;
 
 const exportNumber = document.getElementById('export-number');
 const table = document.getElementById('export-list');
 const tbody = document.querySelector('tbody');
 const btnExport = document.getElementById('btn-export');
 const btnDeleteFiles = document.getElementById('btn-delete-files');
+const progressBarPercentage = document.getElementById("progress-bar-percentage");
 
 btnExport.addEventListener('click', exportFile);
 btnDeleteFiles.addEventListener('click', deleteFiles);
 
+let countClick = 0;
 exportNumber.innerHTML = countClick.toString();
 
 function displayCount(counter) {
@@ -34,7 +94,7 @@ function displayCount(counter) {
 }
 
 function removeTableRows() {
-    document.querySelectorAll('table#export-list tbody tr').forEach(el => {el.remove()});
+    document.querySelectorAll('table#export-list tbody tr').forEach(el => el.remove());
 }
 
 function addTableRow(filename, size, exportedAt) {
@@ -99,45 +159,7 @@ function showMessage(type, message, timeout) {
     setTimeout(() => {
         const alert = document.querySelector('.alert');
         alert.parentNode.removeChild(alert);
-        document.getElementById("progress-bar-percentage").classList.add('d-none');
+        progressBarPercentage.classList.add('d-none');
     }, timeout);
-}
-
-function handle(result) {
-    const data = JSON.parse(result.data);
-    const currentDate = new Date().toLocaleString();
-
-    if (data.hasOwnProperty('percentage')) {
-        document.getElementById('btn-delete-files').classList.add('disabled');
-        document.getElementById("progress-bar-percentage").classList.remove('d-none');
-        const progressBar = document.getElementById("dynamic");
-        const percentage = Math.round(data.percentage);
-        progressBar.setAttribute('style', `width:${percentage}%`);
-        progressBar.setAttribute('aria-valuenow', percentage);
-        progressBar.textContent = `${percentage}% Complete`;
-    }
-
-    if (data.hasOwnProperty('filename')) {
-        const message = `Filename ${data.filename} has been created at ${currentDate}`;
-        showMessage('success', message, 3000);
-        addTableRow(data.filename, data.size, currentDate);
-        document.getElementById('btn-delete-files').classList.remove('disabled')
-    }
-
-    if (data.hasOwnProperty('counter')) {
-        displayCount(data.counter);
-    }
-
-    if (data.hasOwnProperty('delete')) {
-        const message = data.delete;
-        removeTableRows();
-        showMessage('success', message, 3000);
-    }
-
-    if (data.hasOwnProperty('message')) {
-        const message = data.message;
-        console.log(message);
-        showMessage('success', message, 5000);
-    }
 }
 
