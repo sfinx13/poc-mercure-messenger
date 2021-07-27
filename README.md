@@ -36,7 +36,7 @@ Any app MUST bear a JSON Web Token (JWT) to be authorized to **PUBLISH** updates
 }
 ```
 
-3. Sign the JWT with the secrey key on *verify signature section* (Ex: poc-mercure)
+3. Sign the JWT with the secrey key on *verify signature section* (Ex: !ChangeMe!)
 4. Finally edit MERCURE_JWT_TOKEN and MERCURE_JWT_SECRET on .env file
 
 ## Installation
@@ -53,6 +53,7 @@ npm install
 ```
 
 ### Compile assets for JS/CSS
+
 ```bash
 npm run build
 ```
@@ -61,11 +62,13 @@ npm run build
 
 Send a notification with random message with option if you want to push more messages
 
-Send 10 notifications
+Send 50 notifications
 ```bash
 docker exec -it poc-php-fpm bin/console app:send-notif -i 50
 ```
 
-## Debugging tool
+## Debugging
 
-http://localhost:9000/.well-known/mercure/ui/
+Debugging tool: http://localhost:9000/.well-known/mercure/ui/
+
+Upload postman collection [postman/](postman/)
