@@ -5,6 +5,7 @@ namespace App\MessageHandler;
 use App\Message\DeleteMessage;
 use Psr\Cache\CacheItemInterface;
 use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -15,20 +16,21 @@ use Symfony\Component\Uid\Uuid;
 
 class DeleteMessageHandler implements MessageHandlerInterface
 {
-    use LoggerAwareTrait;
-
     protected ParameterBagInterface $parameterBag;
     protected HubInterface $hub;
     protected AdapterInterface $cache;
+    protected LoggerInterface $logger;
 
     public function __construct(
         ParameterBagInterface $parameterBag,
         HubInterface $hub,
-        AdapterInterface $cache
+        AdapterInterface $cache,
+        LoggerInterface $logger
     ) {
         $this->parameterBag = $parameterBag;
         $this->hub = $hub;
         $this->cache = $cache;
+        $this->logger = $logger;
     }
 
     public function __invoke(DeleteMessage $deleteMessage)
@@ -38,8 +40,13 @@ class DeleteMessageHandler implements MessageHandlerInterface
             $csvDir = $this->parameterBag->get('kernel.project_dir') . '/public/csv/';
             $filesystem = new Filesystem();
             if ($filesystem->exists($csvDir)) {
-                $filesystem->remove($csvDir);
-                $data['message'] = 'All files has been deleted';
+                try {
+                    $filesystem->remove($csvDir);
+                } catch (\Exception $e) {
+                    $this->logger->error($e->getMessage());
+                } finally {
+                    $data['message'] = 'All files has been deleted';
+                }
             } else {
                 $data['message'] = 'No files to delete';
             }

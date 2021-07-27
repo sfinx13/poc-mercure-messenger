@@ -19,8 +19,8 @@ const APP_URL = process.env.APP_URL;
     const eventSource = new EventSource(SUBSCRIBE_URL.toString());
     eventSource.addEventListener('delete-files', (messageEvent) => {
         const data = JSON.parse(messageEvent.data);
-        if (data.hasOwnProperty('delete')) {
-            const message = data.delete;
+        if (data.hasOwnProperty('message')) {
+            const message = data.message;
             removeTableRows('table#export-list tbody tr');
             showMessage('success', message, 3000);
         }
