@@ -66,7 +66,7 @@ class ExportMessageHandler implements MessageHandlerInterface
                     $topicUrl,
                     json_encode($data),
                     false,
-                    Uuid::v1(),
+                    Uuid::v4(),
                     'progress-bar'
                 );
 
@@ -83,7 +83,7 @@ class ExportMessageHandler implements MessageHandlerInterface
             $topicUrl,
             json_encode($data),
             false,
-            Uuid::v1(),
+            Uuid::v4(),
             'creating-file'
         );
         $this->hub->publish($notificationUpdate);
@@ -101,7 +101,7 @@ class ExportMessageHandler implements MessageHandlerInterface
             $topicUrl,
             json_encode($data),
             false,
-            Uuid::v1(),
+            Uuid::v4(),
             'counter'
         );
         $this->hub->publish($counterUpdate);

@@ -39,15 +39,15 @@ class DeleteMessageHandler implements MessageHandlerInterface
             $filesystem = new Filesystem();
             if ($filesystem->exists($csvDir)) {
                 $filesystem->remove($csvDir);
-                $data = ['delete' => 'All files has been deleted'];
+                $data['message'] = 'All files has been deleted';
             } else {
-                $data = ['delete' => 'No files to delete'];
+                $data['message'] = 'No files to delete';
             }
         } else {
-            $data = ['delete' => 'Only csv can be deleted'];
+            $data['message'] = 'Only csv can be deleted';
         }
 
-        $deleteUpdate = new Update($topicUrl, json_encode($data), false, Uuid::v1(), 'delete-files');
+        $deleteUpdate = new Update($topicUrl, json_encode($data), false, Uuid::v4(), 'delete-files');
         $this->hub->publish($deleteUpdate);
 
         /** @var CacheItemInterface $counter */
@@ -56,7 +56,7 @@ class DeleteMessageHandler implements MessageHandlerInterface
         $this->cache->save($counter);
 
         $data = ['counter' => (int)$counter->get()];
-        $counterUpdate = new Update($topicUrl, json_encode($data), false, Uuid::v1(), 'counter');
+        $counterUpdate = new Update($topicUrl, json_encode($data), false, Uuid::v4(), 'counter');
         $this->hub->publish($counterUpdate);
     }
 }
