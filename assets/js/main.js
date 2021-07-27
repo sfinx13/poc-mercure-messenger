@@ -64,6 +64,13 @@ const APP_URL = process.env.APP_URL;
         'warning',
         'Please start the mercure server to be notified in real-time',
         5000);
+
+
+    window.addEventListener('beforeunload', () => {
+        if (eventSource !== null) {
+            eventSource.close();
+        }
+    });
 })();
 
 const exportNumber = document.getElementById('export-number');
