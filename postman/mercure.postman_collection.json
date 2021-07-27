@@ -1,0 +1,160 @@
+{
+	"info": {
+		"_postman_id": "25d84dc5-e97b-4a4a-82e3-5b9aad38507e",
+		"name": "Mercure",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/.well-known/mercure",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdLCJzdWJzY3JpYmUiOlsiKiJdfX0.Ws4gtnaPtM-R2-z9DnH-laFu5lDZrMnmyTpfU8uKyQo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "topic",
+							"value": "http://demo.com/message",
+							"type": "text"
+						},
+						{
+							"key": "data",
+							"value": "{\"message\":\"Bonjour ça va\"}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:9000/.well-known/mercure",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						".well-known",
+						"mercure"
+					]
+				},
+				"description": "The publisher sends updates by issuing POST requests on the hub URL. When it receives an update, the hub dispatches it to subscribers using the established server-sent events connections.\n\nThe request MUST be encoded using the application/x-www-form-urlencoded format (W3C.REC-html52-20171214) and contains the name-value tuples."
+			},
+			"response": []
+		},
+		{
+			"name": "/.well-known/mercure/subscriptions",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdLCJzdWJzY3JpYmUiOlsiKiJdfX0.Ws4gtnaPtM-R2-z9DnH-laFu5lDZrMnmyTpfU8uKyQo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/.well-known/mercure/subscriptions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						".well-known",
+						"mercure",
+						"subscriptions"
+					]
+				},
+				"description": "The collection of subscriptions"
+			},
+			"response": []
+		},
+		{
+			"name": "/.well-known/mercure/subscriptions/{topic}",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdLCJzdWJzY3JpYmUiOlsiKiJdfX0.Ws4gtnaPtM-R2-z9DnH-laFu5lDZrMnmyTpfU8uKyQo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/ld+json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:9000/.well-known/mercure/subscriptions/http%3A%2F%2Fdemo.com%2Ffiles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						".well-known",
+						"mercure",
+						"subscriptions",
+						"http%3A%2F%2Fdemo.com%2Ffiles"
+					]
+				},
+				"description": "The collection of subscriptions for the given topic selector"
+			},
+			"response": []
+		},
+		{
+			"name": "/.well-known/mercure/subscriptions/{topic}/{subscriber}",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdLCJzdWJzY3JpYmUiOlsiKiJdfX0.Ws4gtnaPtM-R2-z9DnH-laFu5lDZrMnmyTpfU8uKyQo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9000/.well-known/mercure/subscriptions/http%3A%2F%2Fdemo.com%2Fmessage/urn:uuid:0924bd38-7dbb-4c7b-95d0-78fcc5e62b2e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						".well-known",
+						"mercure",
+						"subscriptions",
+						"http%3A%2F%2Fdemo.com%2Fmessage",
+						"urn:uuid:0924bd38-7dbb-4c7b-95d0-78fcc5e62b2e"
+					]
+				},
+				"description": "A specific subscription"
+			},
+			"response": []
+		}
+	]
+}
