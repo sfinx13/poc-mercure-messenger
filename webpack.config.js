@@ -83,7 +83,6 @@ Encore
         options['process.env'].APP_URL = JSON.stringify(env.parsed.APP_URL);
         options['process.env'].MERCURE_HUB_URL =  JSON.stringify(env.parsed.MERCURE_HUB_URL);
         options['process.env'].TOPIC_URL = JSON.stringify(env.parsed.TOPIC_URL);
-        options['process.env'].MERCURE_JWT_TOKEN = JSON.stringify(env.parsed.MERCURE_JWT_TOKEN);
     })
 ;
 

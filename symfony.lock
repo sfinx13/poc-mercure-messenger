@@ -20,6 +20,9 @@
     "doctrine/common": {
         "version": "2.12.0"
     },
+    "doctrine/data-fixtures": {
+        "version": "1.5.0"
+    },
     "doctrine/dbal": {
         "version": "v2.10.1"
     },
@@ -39,6 +42,18 @@
             "./config/packages/prod/doctrine.yaml",
             "./src/Entity/.gitignore",
             "./src/Repository/.gitignore"
+        ]
+    },
+    "doctrine/doctrine-fixtures-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "e5b542d4ef47d8a003c91beb35650c76907f7e53"
+        },
+        "files": [
+            "src/DataFixtures/AppFixtures.php"
         ]
     },
     "doctrine/doctrine-migrations-bundle": {
@@ -314,6 +329,9 @@
     "symfony/orm-pack": {
         "version": "v1.0.8"
     },
+    "symfony/password-hasher": {
+        "version": "v5.3.4"
+    },
     "symfony/polyfill-intl-grapheme": {
         "version": "v1.23.0"
     },
@@ -341,6 +359,12 @@
     "symfony/profiler-pack": {
         "version": "v1.0.4"
     },
+    "symfony/property-access": {
+        "version": "v5.3.4"
+    },
+    "symfony/property-info": {
+        "version": "v5.3.4"
+    },
     "symfony/redis-messenger": {
         "version": "v5.3.2"
     },
@@ -357,6 +381,30 @@
             "./config/packages/routing.yaml",
             "./config/routes.yaml"
         ]
+    },
+    "symfony/security-bundle": {
+        "version": "5.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.3",
+            "ref": "8b35bfc00a7716db4ca5a764a4b338476ca3a704"
+        },
+        "files": [
+            "config/packages/security.yaml"
+        ]
+    },
+    "symfony/security-core": {
+        "version": "v5.3.4"
+    },
+    "symfony/security-csrf": {
+        "version": "v5.3.4"
+    },
+    "symfony/security-guard": {
+        "version": "v5.3.4"
+    },
+    "symfony/security-http": {
+        "version": "v5.3.4"
     },
     "symfony/service-contracts": {
         "version": "v2.0.1"

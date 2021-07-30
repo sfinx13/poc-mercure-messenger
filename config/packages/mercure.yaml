@@ -5,5 +5,4 @@ mercure:
         default:
             url: '%env(MERCURE_PUBLISH_URL)%'
             jwt:
-                secret: '%env(MERCURE_JWT_SECRET)%'
-                publish: '*'
+                provider: App\Security\JwtProvider

@@ -60,10 +60,8 @@ services:
       SERVER_NAME: ':80'
       MERCURE_PUBLISHER_JWT_KEY: '!ChangeMe!'
       MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeMe!'
-      MERCURE_JWT_TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdLCJzdWJzY3JpYmUiOlsiKiJdfX0.4DUMumRBcwown63lKUecQcFxGAr8Dg2vwpSuKfAoKcs
       MERCURE_EXTRA_DIRECTIVES: |-
-        cors_origins *
-        anonymous
+        cors_origins http://localhost:8080 http://127.0.0.1:8080
     # Uncomment the following line to enable the development mode
     command: /usr/bin/caddy run -config /etc/caddy/Caddyfile.dev
     ports:

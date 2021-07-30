@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         zlib1g-dev \
         libxml2-dev \
         libzip-dev \
+        supervisor \
          # Install intl
         && docker-php-ext-configure intl \
         && docker-php-ext-install -j2 intl \
@@ -21,4 +22,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         && rm /usr/src/php/ext/*.tgz \
         && curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
 
-ENTRYPOINT ["bash", "/application/.docker/php-worker/consume_worker.sh"]
+RUN chmod a+rwx /var/log/supervisor/
+
+COPY ./supervisord.conf /etc/supervisor/conf.d/
+EXPOSE 8089
+
+ENTRYPOINT ["/usr/bin/supervisord"]

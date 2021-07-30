@@ -2,18 +2,20 @@
 
 namespace App\Message;
 
+use App\Entity\User;
+
 class DeleteMessage
 {
-    protected string $extension;
+    protected User $user;
 
-    public function getExtension(): string
+    public function getUser(): User
     {
-        return $this->extension;
+        return $this->user;
     }
 
-    public function setExtension(string $extension): DeleteMessage
+    public function setUser(User $user): DeleteMessage
     {
-        $this->extension = $extension;
+        $this->user = $user;
         return $this;
     }
 }

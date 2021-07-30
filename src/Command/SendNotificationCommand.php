@@ -53,7 +53,7 @@ class SendNotificationCommand extends Command
             $messageUpdate = new Update(
                 $this->parameterBag->get('topic_url') . '/message',
                 json_encode(['message' => $faker->text()]),
-                false,
+                true,
             );
             $this->hub->publish($messageUpdate);
         }

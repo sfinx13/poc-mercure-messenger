@@ -2,86 +2,61 @@
 
 namespace App\Controller;
 
-use App\Message\DeleteMessage;
+use App\Manager\FileManager;
 use App\Message\ExportMessage;
+use App\Service\Counter;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Cache\CacheItemInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("app")
+ */
 class ExportController extends AbstractController
 {
+    protected MessageBusInterface $messageBus;
     protected EntityManagerInterface $entityManager;
-
-    protected AdapterInterface $cache;
+    protected FileManager $fileManager;
+    protected Counter $counter;
 
     public function __construct(
+        MessageBusInterface $messageBus,
         EntityManagerInterface $entityManager,
-        AdapterInterface $cache
+        FileManager $fileManager,
+        Counter $counter
     ) {
+        $this->messageBus = $messageBus;
         $this->entityManager = $entityManager;
-        $this->cache = $cache;
+        $this->fileManager = $fileManager;
+        $this->counter = $counter;
     }
 
     /**
      * @Route("/export", name="export_file")
      */
     public function export(
-        MessageBusInterface $messageBus,
         Request $request
     ): JsonResponse {
-        $this->countMessage();
+        $username = $this->getUser()->getUserIdentifier();
+        $this->counter->current($username);
         $args = $request->query->all();
+        $startDate = new \DateTime($args['start-date']);
+        $filename = 'export_' . $username. '_' . $startDate->getTimestamp() . '.csv';
+
         $exportMessage = (new ExportMessage())
-            ->setProjectId($args['project-id'])
-            ->setStartDate(new \DateTime($args['start-date']))
+            ->setUser($this->getUser())
+            ->setStartDate($startDate)
+            ->setFilename($filename)
             ->setInterval($args['interval']);
 
-        $messageBus->dispatch($exportMessage);
+        $file = $this->fileManager->createNew($exportMessage);
+        $this->fileManager->save($file);
 
-        /** @var CacheItemInterface $counter */
-        $counter = $this->cache->getItem('counter');
-        $counter->set(!$counter->isHit() ? 1 : (int)$counter->get() + 1);
-        $this->cache->save($counter);
-
-        return $this->json($counter->get(), Response::HTTP_OK);
-    }
-
-    /**
-     * @Route("/files", name="remove_files", methods={"DELETE"})
-     */
-    public function remove(
-        MessageBusInterface $messageBus,
-        Request $request
-    ): JsonResponse {
-        $args = $request->query->all();
-        $deleteMessage = (new DeleteMessage())->setExtension($args['extension']);
-
-        $messageBus->dispatch($deleteMessage);
-
-        return $this->json(null, Response::HTTP_NO_CONTENT);
-    }
-
-    private function countMessage(): void
-    {
-        $connection = $this->entityManager->getConnection();
-        $request = "SELECT count(*) as nb_message FROM messenger_messages where delivered_at is null;";
-        $statement = $connection->prepare($request);
-        $result = $statement->executeQuery();
-        $data = $result->fetchAssociative();
-        $nbMessage = (int)$data['nb_message'];
-
-        if (0 === $nbMessage) {
-            $this->cache->clear();
-        }
-
-        $counter = $this->cache->getItem('counter');
-        $counter->set($nbMessage);
-        $this->cache->save($counter);
+        $this->messageBus->dispatch($exportMessage);
+        return $this->json($this->counter->increase($username), Response::HTTP_OK);
     }
 }

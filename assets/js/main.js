@@ -1,28 +1,33 @@
 const APP_URL = process.env.APP_URL;
+const TOPICS = JSON.parse(document.querySelector('table').dataset.topics);
 
 (async ()  =>  {
-    const TOPIC_URL = process.env.TOPIC_URL;
-    const MERCURE_JWT_TOKEN = process.env.MERCURE_JWT_TOKEN;
     const SUBSCRIBE_URL = new URL(process.env.MERCURE_HUB_URL);
-    SUBSCRIBE_URL.searchParams.append('topic', `${TOPIC_URL}/files`);
-    SUBSCRIBE_URL.searchParams.append('topic', `${TOPIC_URL}/message`);
+    TOPICS.forEach( topic => {
+        SUBSCRIBE_URL.searchParams.append('topic', topic);
+    })
 
     const response = await fetch(process.env.MERCURE_HUB_URL + "/subscriptions", {
-        headers: {
-            "Authorization" : "Bearer " + MERCURE_JWT_TOKEN
-        }
+        mode: 'no-cors'
     });
-    const data = await response.json();
+    let data = null;
 
-    SUBSCRIBE_URL.searchParams.append('Last-Event-ID', data.lastEventID);
+    /*    try {
+        data = await response.json();
+        SUBSCRIBE_URL.searchParams.append('Last-Event-ID', data.lastEventID);
+    } catch (error) {
+        console.log(error);
+    }
+*/
+    const eventSource = new EventSource(SUBSCRIBE_URL.toString(), {
+        withCredentials: true,
+    });
 
-    const eventSource = new EventSource(SUBSCRIBE_URL.toString());
     eventSource.addEventListener('delete-files', (messageEvent) => {
         const data = JSON.parse(messageEvent.data);
         if (data.hasOwnProperty('message')) {
-            const message = data.message;
             removeTableRows('table#export-list tbody tr');
-            showMessage('success', message, 3000);
+            showMessage('success', data.message, 3000);
         }
     })
     eventSource.addEventListener('counter', (messageEvent) => {
@@ -87,6 +92,7 @@ let countClick = 0;
 exportNumber.innerHTML = countClick.toString();
 
 function displayCount(counter) {
+    console.log(counter);
     exportNumber.innerHTML = counter;
 }
 
@@ -106,7 +112,7 @@ function addTableRow(filename, size, exportedAt) {
     const sizeCell = row.insertCell(1);
     const exportedAtCell = row.insertCell(2);
 
-    filenameCell.innerHTML = `<a href="/download/${filename}">${filename}</a>`;
+    filenameCell.innerHTML = `<a href="/app/download/${filename}">${filename}</a>`;
     sizeCell.innerHTML = size;
     exportedAtCell.innerHTML = exportedAt;
 
@@ -119,7 +125,7 @@ function exportFile() {
     const projectId = Math.floor(Math.random() * 100);
     const interval = Math.floor(Math.random() * 10);
     const startDate = new Date().toISOString();
-    const url = `${APP_URL}/export?project-id=${projectId}&start-date=${startDate}&interval=${interval}`;
+    const url = `${APP_URL}/app/export?project-id=${projectId}&start-date=${startDate}&interval=${interval}`;
 
     fetch(url, {
         mode: 'no-cors'
@@ -137,7 +143,7 @@ function exportFile() {
 
 function deleteFiles() {
     if (!btnDeleteFiles.classList.contains('disabled')) {
-        const url = `${APP_URL}/files?extension=csv`;
+        const url = `${APP_URL}/app/files`;
 
         fetch(url, {method: 'DELETE'})
             .then(response => {

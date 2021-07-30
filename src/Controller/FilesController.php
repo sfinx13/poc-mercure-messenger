@@ -2,40 +2,65 @@
 
 namespace App\Controller;
 
+use App\Message\DeleteMessage;
+use App\Repository\FileRepository;
+use App\Security\CookieGenerator;
+use Lcobucci\JWT\Encoder;
+use Lcobucci\JWT\ClaimsFormatter;
+use Lcobucci\JWT\Encoding\ChainedFormatter;
+use Lcobucci\JWT\Encoding\JoseEncoder;
+use Lcobucci\JWT\Encoding\MicrosecondBasedDateConversion;
+use Lcobucci\JWT\Signer\Key\InMemory;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\Token\Builder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("app")
+ */
 class FilesController extends AbstractController
 {
     /**
-     * @Route("/", name="get_files")
+     * @Route("/files", name="get_files", methods={"GET"})
      */
-    public function getFiles(): Response
+    public function getFiles(FileRepository $fileRepository, CookieGenerator $cookieGenerator): Response
     {
-        $csvDir = $this->getParameter('kernel.project_dir') . '/public/csv/';
-        $finder = new Finder();
+        $files = $fileRepository->findBy(
+            ['user' => $this->getUser()],
+            ['exportedAt' => 'desc']
+        );
 
-        $filesystem = new Filesystem();
-        if ($filesystem->exists($csvDir)) {
-            $finder->files()->in($csvDir);
-            $files = [];
+        $topics = [
+            $this->getParameter('topic_url') . '/files/' . $this->getUser()->getUserIdentifier(),
+            $this->getParameter('topic_url') . '/message'
+        ];
 
-            if ($finder->hasResults()) {
-                $finder->sortByAccessedTime()->reverseSorting();
-                foreach ($finder as $file) {
-                    $files[] = [
-                        'filename' => $file->getFilename(),
-                        'size' => round($file->getSize() / 1024, 0) . ' Ko',
-                        'datetime' => (new \DateTime())->setTimestamp($file->getATime())->format('d-M-Y H:i:s')
-                    ];
-                }
-            }
-        }
-        return $this->render('home/index.html.twig', [
-            'files' => $files ?? []
+        $response = $this->render('home/index.html.twig', [
+            'files' => $files ?? [],
+            'topics' => $topics
         ]);
+
+        $response->headers->setCookie($cookieGenerator->setTopics($topics)->generate());
+
+        return $response;
+    }
+
+    /**
+     * @Route("/files", name="delete_files", methods={"DELETE"})
+     */
+    public function remove(
+        MessageBusInterface $messageBus,
+        Request $request
+    ): JsonResponse {
+        $deleteMessage = (new DeleteMessage())->setUser($this->getUser());
+
+        $messageBus->dispatch($deleteMessage);
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
     }
 }

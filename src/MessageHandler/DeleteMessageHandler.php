@@ -2,68 +2,44 @@
 
 namespace App\MessageHandler;
 
+use App\Manager\FileManager;
 use App\Message\DeleteMessage;
-use Psr\Cache\CacheItemInterface;
-use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
+use App\Service\Counter;
+use App\Service\Publisher;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Mercure\HubInterface;
-use Symfony\Component\Mercure\Update;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
-use Symfony\Component\Uid\Uuid;
 
 class DeleteMessageHandler implements MessageHandlerInterface
 {
     protected ParameterBagInterface $parameterBag;
-    protected HubInterface $hub;
-    protected AdapterInterface $cache;
-    protected LoggerInterface $logger;
+    protected Counter $counter;
+    protected FileManager $fileManager;
+    protected Publisher $publisher;
 
     public function __construct(
         ParameterBagInterface $parameterBag,
-        HubInterface $hub,
-        AdapterInterface $cache,
-        LoggerInterface $logger
+        Publisher $publisher,
+        Counter $counter,
+        FileManager $fileManager
     ) {
         $this->parameterBag = $parameterBag;
-        $this->hub = $hub;
-        $this->cache = $cache;
-        $this->logger = $logger;
+        $this->publisher = $publisher;
+        $this->counter = $counter;
+        $this->fileManager = $fileManager;
     }
 
     public function __invoke(DeleteMessage $deleteMessage)
     {
-        $topicUrl = $this->parameterBag->get('topic_url'). '/files';
-        if ($deleteMessage->getExtension() === 'csv') {
-            $csvDir = $this->parameterBag->get('kernel.project_dir') . '/public/csv/';
-            $filesystem = new Filesystem();
-            if ($filesystem->exists($csvDir)) {
-                try {
-                    $filesystem->remove($csvDir);
-                } catch (\Exception $e) {
-                    $this->logger->error($e->getMessage());
-                } finally {
-                    $data['message'] = 'All files has been deleted';
-                }
-            } else {
-                $data['message'] = 'No files to delete';
-            }
-        } else {
-            $data['message'] = 'Only csv can be deleted';
-        }
+        $this->fileManager->removeFromUser($deleteMessage->getUser());
+        $username = $deleteMessage->getUser()->getUserIdentifier();
 
-        $deleteUpdate = new Update($topicUrl, json_encode($data), false, Uuid::v4(), 'delete-files');
-        $this->hub->publish($deleteUpdate);
+        $data['message'] = 'All files has been deleted';
+        $topic = $this->parameterBag->get('topic_url') . '/files/' . $username;
+        $this->publisher->publish($topic, $data, true, 'delete-files');
 
-        /** @var CacheItemInterface $counter */
-        $counter = $this->cache->getItem('counter');
-        $counter->set(0);
-        $this->cache->save($counter);
+        $data = ['counter' => $this->counter->reset($username)];
+        $this->publisher->publish($topic, $data, true, 'delete-files');
 
-        $data = ['counter' => (int)$counter->get()];
-        $counterUpdate = new Update($topicUrl, json_encode($data), false, Uuid::v4(), 'counter');
-        $this->hub->publish($counterUpdate);
+        $this->fileManager->removeFromUser($deleteMessage->getUser());
     }
 }

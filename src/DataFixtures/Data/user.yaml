@@ -1,0 +1,20 @@
+users:
+  -
+    username: demo-1
+    email: demo-1@yopmail.com
+    password: demo-1
+    roles:
+      - ROLE_USER
+  -
+    username: demo-2
+    email: demo-2@yopmail.com
+    password: demo-2
+    roles:
+      - ROLE_USER
+  -
+    username: demo-3
+    email: demo-3@yopmail.com
+    password: demo-3
+    roles:
+      - ROLE_ADMIN
+      - ROLE_USER

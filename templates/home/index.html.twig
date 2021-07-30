@@ -3,39 +3,47 @@
 {% block title %}Demo Mercure{% endblock %}
 
 {% block body %}
-    <h1>Export CSV </h1>
-    <p class="lead">Click to button to launch CSV Export.<br> Once done, your could download the export.</p>
-    <button id="btn-export" type="button" class="btn btn-primary">
-        <i class="fas fa-file-export"></i> <span id="export-number" class="badge badge-light"></span>
-        <span class="sr-only">processing files</span></button>
+    <section class="starter-template">
 
-    <button id="btn-delete-files" type="button" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
-
-    <div id="progress-bar-percentage" class="progress d-none mt-5">
-        <div id="dynamic" class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%"
-             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-    </div>
-
-    <div>
-        <table id="export-list" class="table mt-5  {{ files|length == 0  ? 'd-none' }}">
-            <thead>
-            <tr>
-                <th scope="col">Filename</th>
-                <th scope="col">Size</th>
-                <th scope="col">Exported at</th>
-            </tr>
-            </thead>
-            <tbody>
-
-            {% for key, file in files %}
+        <h1>Export CSV </h1>
+        <p class="lead">Click to button to launch CSV Export.<br> Once done, your could download the export.</p>
+        <button id="btn-export" type="button" class="btn btn-primary">
+            <i class="fas fa-file-export"></i> <span id="export-number" class="badge badge-light"></span>
+            <span class="sr-only">processing files</span>
+        </button>
+        <button id="btn-delete-files" type="button" class="btn btn-danger">
+            <i class="fa fa-trash" aria-hidden="true"></i>
+        </button>
+        <div id="progress-bar-percentage" class="progress d-none mt-5">
+            <div id="dynamic" class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%"
+                 aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            </div>
+        </div>
+        <div>
+            <table data-topics="{{ topics|json_encode }}" id="export-list"
+                   class="table mt-5  {{ files|length == 0  ? 'd-none' }}">
+                <thead>
                 <tr>
-                    <td><a href="/download/{{ file.filename }}">{{ file.filename }}</a></td>
-                    <td>{{ file.size }}</td>
-                    <td>{{ file.datetime }}</td>
+                    <th scope="col">Filename</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">Exported at</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                {% for key, file in files %}
+                    <tr>
+                        <td><a href="{{ path('download_file', {filename: file.filename}) }}">{{ file.filename }}</a></td>
+                        <td>{{file.size ?? '0 Ko' }}</td>
+                        <td>{{ file.exportedAt|date("d/m/Y H:i:s") }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
 {% endblock %}
 

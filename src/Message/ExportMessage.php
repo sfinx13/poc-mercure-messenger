@@ -2,22 +2,37 @@
 
 namespace App\Message;
 
+use App\Entity\User;
+
 class ExportMessage
 {
-    protected int $projectId;
+    protected User $user;
+
+    protected string $filename;
 
     protected int $interval;
 
     protected \DateTime $startDate;
 
-    public function getProjectId(): int
+    public function getUser(): User
     {
-        return $this->projectId;
+        return $this->user;
     }
 
-    public function setProjectId(int $projectId): ExportMessage
+    public function setUser(User $user): ExportMessage
     {
-        $this->projectId = $projectId;
+        $this->user = $user;
+        return $this;
+    }
+
+    public function getFilename(): string
+    {
+        return $this->filename;
+    }
+
+    public function setFilename(string $filename): ExportMessage
+    {
+        $this->filename = $filename;
         return $this;
     }
 

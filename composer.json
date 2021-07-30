@@ -8,6 +8,7 @@
         "ext-json": "*",
         "doctrine/annotations": "^1.8",
         "fakerphp/faker": "^1.15",
+        "lcobucci/jwt": "^4.1",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "5.3.*",
         "symfony/cache": "^5.3",
@@ -26,6 +27,7 @@
         "symfony/monolog-bundle": "^3.5",
         "symfony/orm-pack": "^1.0",
         "symfony/routing": "^5.3",
+        "symfony/security-bundle": "5.3.*",
         "symfony/string": "^5.3",
         "symfony/twig-pack": "^1.0",
         "symfony/uid": "5.3.*",
@@ -33,6 +35,7 @@
         "symfony/yaml": "^5.3"
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "symfony/maker-bundle": "^1.14",
         "symfony/profiler-pack": "^1.0"
     },

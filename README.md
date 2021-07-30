@@ -43,9 +43,8 @@ Any app MUST bear a JSON Web Token (JWT) to be authorized to **PUBLISH** updates
 
 ### Run the app
 ```bash
-docker-compose up -d
+make run
 ```
-
 ### Install dependencies
 ```bash
 composer install
@@ -58,6 +57,10 @@ npm install
 npm run build
 ```
 
+### Load data
+```bash
+make data
+```
 ## Command
 
 Send a notification with random message with option if you want to push more messages

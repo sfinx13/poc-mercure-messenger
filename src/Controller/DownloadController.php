@@ -7,10 +7,13 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("app")
+ */
 class DownloadController extends AbstractController
 {
     /**
-     * @Route("/download/{filename}", name="download")
+     * @Route("/download/{filename}", name="download_file")
      */
     public function download(string $filename): BinaryFileResponse
     {
