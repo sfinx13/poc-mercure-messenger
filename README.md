@@ -11,34 +11,6 @@ Extract large data in asynchronous way using Messenger and Mercure for live noti
 cp .env.dist .env
 ```
 
-### JWT(JSON Web Token)
-https://symfony.com/doc/current/mercure.html#configuration
-
-### Create a JWT
-
-Any app MUST bear a JSON Web Token (JWT) to be authorized to **PUBLISH** updates and, sometimes, to **SUBSCRIBE** to the Mercure Hub
-
-#### How to generate one in static way ?
-
-1. Generate one on https://jwt.io/
-2. Copy, paste this payload on the *payload section* to be able to publish and subscribe to any topic
-
-```json
-{
-  "mercure": {
-    "publish": [
-      "*"
-    ], 
-    "subscribe" : [
-      "*"
-    ]
-  }
-}
-```
-
-3. Sign the JWT with the secrey key on *verify signature section* (Ex: !ChangeMe!)
-4. Finally edit MERCURE_JWT_TOKEN and MERCURE_JWT_SECRET on .env file
-
 ## Installation
 
 ### Run the app
