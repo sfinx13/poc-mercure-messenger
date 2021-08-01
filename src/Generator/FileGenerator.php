@@ -3,6 +3,7 @@
 namespace App\Generator;
 
 use App\Manager\FileManager;
+use App\Manager\NotificationManager;
 use App\Message\ExportMessage;
 use App\Service\Publisher;
 use App\Utils\MathHelper;
@@ -11,8 +12,6 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Mercure\Update;
-use Symfony\Component\Uid\Uuid;
 
 class FileGenerator
 {
@@ -41,7 +40,8 @@ class FileGenerator
         $this->parameterBag = $parameterBag;
         $this->publisher = $publisher;
         $this->logger = $logger;
-        $this->destinationFolder = $this->parameterBag->get('kernel.project_dir') . $this->parameterBag->get('destination_folder');
+        $this->destinationFolder = $this->parameterBag->get('kernel.project_dir')
+            . $this->parameterBag->get('destination_folder');
     }
 
     public function initFrom(ExportMessage $exportMessage): self
@@ -71,18 +71,13 @@ class FileGenerator
 
         while (new \DateTime() < $stopDate) {
             $now = \DateTime::createFromFormat('U.u', microtime(true));
-
-            if ($now !== false) {
-                $line = $now->format("Y-m-d H:i:s.u") . ';' . MathHelper::randomFloat(0, 1);
-                $filesystem->appendToFile($this->filepath, $line . PHP_EOL);
-
-                $data = ['percentage' => abs($this->getPercentage($startDate, $stopDate) - 100)];
-                $this->publisher->publish($topics, $data, true, 'progress-bar');
-            }
+            $line = $now->format("Y-m-d H:i:s.u") . ';' . MathHelper::randomFloat(0, 1);
+            $filesystem->appendToFile($this->filepath, $line . PHP_EOL);
+            $data = ['percentage' => abs($this->getPercentage($startDate, $stopDate) - 100)];
+            $this->publisher->publish($topics, $data, true, 'progress-bar');
         }
 
         $file = new File($this->filepath);
-
         $this->filesize =  round($file->getSize() / 1024) . ' Ko';
         $this->generatedAt = time();
     }

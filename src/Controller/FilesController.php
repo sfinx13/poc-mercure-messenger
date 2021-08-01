@@ -5,14 +5,6 @@ namespace App\Controller;
 use App\Message\DeleteMessage;
 use App\Repository\FileRepository;
 use App\Security\CookieGenerator;
-use Lcobucci\JWT\Encoder;
-use Lcobucci\JWT\ClaimsFormatter;
-use Lcobucci\JWT\Encoding\ChainedFormatter;
-use Lcobucci\JWT\Encoding\JoseEncoder;
-use Lcobucci\JWT\Encoding\MicrosecondBasedDateConversion;
-use Lcobucci\JWT\Signer\Key\InMemory;
-use Lcobucci\JWT\Signer\Hmac\Sha256;
-use Lcobucci\JWT\Token\Builder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,11 +45,25 @@ class FilesController extends AbstractController
     /**
      * @Route("/files", name="delete_files", methods={"DELETE"})
      */
-    public function remove(
+    public function removeAll(
         MessageBusInterface $messageBus,
         Request $request
     ): JsonResponse {
         $deleteMessage = (new DeleteMessage())->setUser($this->getUser());
+
+        $messageBus->dispatch($deleteMessage);
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @Route("/files/{filename}", name="delete_file", methods={"DELETE"})
+     */
+    public function remove(
+        MessageBusInterface $messageBus,
+        string $filename
+    ): JsonResponse {
+        $deleteMessage = (new DeleteMessage())->setFilename($filename)->setUser($this->getUser());
 
         $messageBus->dispatch($deleteMessage);
 

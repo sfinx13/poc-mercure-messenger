@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Manager\NotificationManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +24,7 @@ class LoginFormAuthentificatorAuthenticator extends AbstractLoginFormAuthenticat
     public const LOGIN_ROUTE = 'app_login';
 
     private UrlGeneratorInterface $urlGenerator;
+    private NotificationManager $notificationManager;
 
     public function __construct(UrlGeneratorInterface $urlGenerator)
     {
@@ -50,6 +52,7 @@ class LoginFormAuthentificatorAuthenticator extends AbstractLoginFormAuthenticat
             return new RedirectResponse($targetPath);
         }
 
+        $this->notificationManager->createNotification('login');
         return new RedirectResponse($this->urlGenerator->generate('get_files'));
     }
 

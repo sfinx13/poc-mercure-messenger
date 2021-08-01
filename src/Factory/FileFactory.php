@@ -9,13 +9,10 @@ use Symfony\Component\Security\Core\Security;
 
 class FileFactory
 {
-    protected Security $security;
     protected ParameterBagInterface $parameterBag;
 
-
-    public function __construct(Security $security, ParameterBagInterface $parameterBag)
+    public function __construct(ParameterBagInterface $parameterBag)
     {
-        $this->security = $security;
         $this->parameterBag = $parameterBag;
     }
 
@@ -26,7 +23,7 @@ class FileFactory
             . $exportMessage->getFilename();
 
         return (new File())
-            ->setUser($this->security->getUser())
+            ->setUser($exportMessage->getUser())
             ->setFilename($exportMessage->getFilename())
             ->setFilepath($filepath)
             ->setStatus(File::STATUS_DRAFT);

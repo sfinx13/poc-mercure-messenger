@@ -4,7 +4,7 @@ namespace App\Message;
 
 use App\Entity\User;
 
-class ExportMessage
+class ExportMessage implements MessageInterface
 {
     protected User $user;
 

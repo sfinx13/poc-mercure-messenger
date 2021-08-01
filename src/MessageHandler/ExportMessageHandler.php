@@ -4,12 +4,12 @@ namespace App\MessageHandler;
 
 use App\Generator\FileGenerator;
 use App\Manager\FileManager;
+use App\Manager\NotificationManager;
 use App\Message\ExportMessage;
 use App\Entity\File;
 use App\Service\Counter;
 use App\Service\Publisher;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
@@ -21,6 +21,7 @@ class ExportMessageHandler implements MessageHandlerInterface
     protected FileGenerator $fileGenerator;
     protected FileManager $fileManager;
     protected LoggerInterface $logger;
+    protected NotificationManager $notificationManager;
 
     public function __construct(
         ParameterBagInterface $parameterBag,
@@ -28,7 +29,8 @@ class ExportMessageHandler implements MessageHandlerInterface
         Counter $counter,
         FileGenerator $fileGenerator,
         FileManager $fileManager,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        NotificationManager $notificationManager
     ) {
         $this->parameterBag = $parameterBag;
         $this->publisher = $publisher;
@@ -36,11 +38,14 @@ class ExportMessageHandler implements MessageHandlerInterface
         $this->fileGenerator = $fileGenerator;
         $this->fileManager = $fileManager;
         $this->logger = $logger;
+        $this->notificationManager = $notificationManager;
     }
 
     public function __invoke(ExportMessage $exportMessage)
     {
+        $this->notificationManager->createExportNotification($exportMessage, 'export-file-start');
         $this->fileGenerator->initFrom($exportMessage)->generate();
+        $this->notificationManager->createExportNotification($exportMessage, 'export-file-end');
 
         $size = $this->fileGenerator->getFilesize();
         $filename = $this->fileGenerator->getFilename();

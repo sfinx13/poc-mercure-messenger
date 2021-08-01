@@ -10,6 +10,7 @@ use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
 /**
  * @ORM\Entity(repositoryClass=NotificationTypeRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class NotificationType
 {
@@ -22,34 +23,34 @@ class NotificationType
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      */
-    private int $id;
+    private string $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private ?string $type;
+    private string $type;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private ?string $name;
+    private string $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private ?string $description;
+    private string $slug;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private ?string $template;
+    private string $template;
 
-    public function getId(): ?int
+    public function getId(): string
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -61,19 +62,18 @@ class NotificationType
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getSlug(): string
     {
-        return $this->description;
+        return $this->slug;
     }
 
-    public function setDescription(string $description): self
+    public function setSlug(string $slug): self
     {
-        $this->description = $description;
-
+        $this->slug = $slug;
         return $this;
     }
 
-    public function getType(): ?string
+    public function getType(): string
     {
         return $this->type;
     }
@@ -85,7 +85,7 @@ class NotificationType
         return $this;
     }
 
-    public function getTemplate(): ?string
+    public function getTemplate(): string
     {
         return $this->template;
     }

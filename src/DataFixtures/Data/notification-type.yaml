@@ -1,0 +1,25 @@
+notification-types:
+  -
+    type: notification
+    name: Login
+    template: "{{user}} vient de s'authentifier."
+  -
+    type: activity
+    name: Export file end
+    template: "L'export {{filename}} de {{user}} est terminé. {{link_1}} {{link_2}}"
+  -
+    type: notification
+    name: Export file start
+    template: "{{user}} a demarré un export de donnée"
+  -
+    type: notification
+    name: Export file in progress
+    template: "Un export de {{user}} est en cours"
+  -
+    type: notification
+    name: Delete file
+    template: "{{user}} a supprimé un fichier {{filename}}"
+  -
+    type: notification
+    name: Logout activity
+    template: "{{user}} s'est déconnecté."

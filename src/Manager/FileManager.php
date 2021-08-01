@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-class FileManager
+class FileManager extends AbstractManager
 {
     protected EntityManagerInterface $entityManager;
     protected FileRepository $fileRepository;
@@ -24,7 +24,7 @@ class FileManager
         FileFactory $fileFactory,
         ParameterBagInterface $parameterBag
     ) {
-        $this->entityManager = $entityManager;
+        parent::__construct($entityManager);
         $this->fileRepository = $fileRepository;
         $this->fileFactory = $fileFactory;
         $this->parameterBag = $parameterBag;
@@ -43,13 +43,6 @@ class FileManager
         return $this->fileRepository->findOneBy($criteria);
     }
 
-    public function save(File $file, bool $flush = true): void
-    {
-        $this->entityManager->persist($file);
-        if ($flush) {
-            $this->flush();
-        }
-    }
 
     public function removeFromUser(User $user): void
     {
@@ -64,24 +57,21 @@ class FileManager
         $this->flush();
     }
 
+    public function removeFromFilename(string $filename): void
+    {
+        $file = $this->fileRepository->findOneBy([
+            'filename' => $filename
+        ]);
+
+        $this->removeFromFilesystem($file->getFilepath());
+        $this->remove($file);
+    }
+
     public function removeFromFilesystem($filepath): void
     {
         $filesystem = new Filesystem();
         if ($filesystem->exists($filepath)) {
             $filesystem->remove($filepath);
         }
-    }
-
-    public function remove(File $file, bool $flush = true): void
-    {
-        $this->entityManager->remove($file);
-        if ($flush) {
-            $this->flush();
-        }
-    }
-
-    public function flush(): void
-    {
-        $this->entityManager->flush();
     }
 }

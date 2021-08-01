@@ -3,6 +3,7 @@
 namespace App\MessageHandler;
 
 use App\Manager\FileManager;
+use App\Manager\NotificationManager;
 use App\Message\DeleteMessage;
 use App\Service\Counter;
 use App\Service\Publisher;
@@ -11,25 +12,33 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class DeleteMessageHandler implements MessageHandlerInterface
 {
-    protected ParameterBagInterface $parameterBag;
-    protected Counter $counter;
-    protected FileManager $fileManager;
-    protected Publisher $publisher;
+    private ParameterBagInterface $parameterBag;
+    private Counter $counter;
+    private FileManager $fileManager;
+    private Publisher $publisher;
+    private NotificationManager $notificationManager;
 
     public function __construct(
         ParameterBagInterface $parameterBag,
         Publisher $publisher,
         Counter $counter,
-        FileManager $fileManager
+        FileManager $fileManager,
+        NotificationManager $notificationManager
     ) {
         $this->parameterBag = $parameterBag;
         $this->publisher = $publisher;
         $this->counter = $counter;
         $this->fileManager = $fileManager;
+        $this->notificationManager = $notificationManager;
     }
 
     public function __invoke(DeleteMessage $deleteMessage)
     {
+        if (!empty($deleteMessage->getFilename())) {
+            $this->fileManager->removeFromFilename($deleteMessage->getFilename());
+            $this->notificationManager->createNotification($deleteMessage, 'delete-file');
+        }
+
         $this->fileManager->removeFromUser($deleteMessage->getUser());
         $username = $deleteMessage->getUser()->getUserIdentifier();
 

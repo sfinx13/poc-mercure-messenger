@@ -10,6 +10,7 @@ use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
 /**
  * @ORM\Entity(repositoryClass=NotificationRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Notification
 {
@@ -22,7 +23,7 @@ class Notification
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      */
-    private int $id;
+    private string $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="notifications")
@@ -70,9 +71,20 @@ class Notification
      */
     private ?\DateTimeImmutable $processedAt;
 
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+        return $this;
     }
 
     public function getContent(): string
