@@ -26,10 +26,9 @@ class Notification
     private string $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="notifications")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
-    private User $user;
+    private string $username;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -76,14 +75,21 @@ class Notification
         return $this->id;
     }
 
-    public function getUser(): User
+    /**
+     * @return string
+     */
+    public function getUsername(): string
     {
-        return $this->user;
+        return $this->username;
     }
 
-    public function setUser(User $user): self
+    /**
+     * @param string $username
+     * @return Notification
+     */
+    public function setUsername(string $username): Notification
     {
-        $this->user = $user;
+        $this->username = $username;
         return $this;
     }
 

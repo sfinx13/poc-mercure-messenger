@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Demo Mercure{% endblock %}
+{% block title %}Demo notification{% endblock %}
 
 {% block body %}
-    <section class="starter-template">
+    <section data-topics="{{ topics|json_encode }}" class="starter-template">
 
         <h1>Export CSV </h1>
         <p class="lead">Click to button to launch CSV Export.<br> Once done, your could download the export.</p>
@@ -20,7 +20,7 @@
             </div>
         </div>
         <div>
-            <table data-topics="{{ topics|json_encode }}" id="export-list"
+            <table id="export-list"
                    class="table mt-5  {{ files|length == 0  ? 'd-none' }}">
                 <thead>
                 <tr>
@@ -44,6 +44,6 @@
 {% endblock %}
 
 {% block javascripts %}
-    {{ encore_entry_script_tags('app') }}
+    {{ encore_entry_script_tags('main') }}
 {% endblock %}
 

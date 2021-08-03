@@ -2,73 +2,117 @@
 
 namespace App\MessageHandler;
 
+use App\Entity\Notification as EntityNotification;
+use App\Entity\NotificationType;
 use App\Generator\FileGenerator;
 use App\Manager\FileManager;
 use App\Manager\NotificationManager;
 use App\Message\ExportMessage;
-use App\Entity\File;
+use App\Model\FileInfo;
+use App\Notification\Notification;
+use App\Notification\Notifier;
 use App\Service\Counter;
-use App\Service\Publisher;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ExportMessageHandler implements MessageHandlerInterface
 {
-    protected ParameterBagInterface $parameterBag;
-    protected Publisher $publisher;
-    protected Counter $counter;
-    protected FileGenerator $fileGenerator;
-    protected FileManager $fileManager;
-    protected LoggerInterface $logger;
-    protected NotificationManager $notificationManager;
+    private UrlGeneratorInterface $router;
+
+    private Notifier $notifier;
+
+    private Counter $counter;
+
+    private FileGenerator $fileGenerator;
+
+    private FileManager $fileManager;
+
+    private NotificationManager $notificationManager;
 
     public function __construct(
-        ParameterBagInterface $parameterBag,
-        Publisher $publisher,
-        Counter $counter,
-        FileGenerator $fileGenerator,
-        FileManager $fileManager,
-        LoggerInterface $logger,
-        NotificationManager $notificationManager
+        UrlGeneratorInterface $router,
+        Notifier             $notifier,
+        Counter               $counter,
+        FileGenerator         $fileGenerator,
+        FileManager           $fileManager,
+        NotificationManager   $notificationManager
     ) {
-        $this->parameterBag = $parameterBag;
-        $this->publisher = $publisher;
+        $this->router = $router;
+        $this->notifier = $notifier;
         $this->counter = $counter;
         $this->fileGenerator = $fileGenerator;
         $this->fileManager = $fileManager;
-        $this->logger = $logger;
         $this->notificationManager = $notificationManager;
     }
 
     public function __invoke(ExportMessage $exportMessage)
     {
-        $this->notificationManager->createExportNotification($exportMessage, 'export-file-start');
-        $this->fileGenerator->initFrom($exportMessage)->generate();
-        $this->notificationManager->createExportNotification($exportMessage, 'export-file-end');
+        $username = $exportMessage->getUsername();
+        $this->notifier->send(
+            new Notification(
+                ['notifications'],
+                $this->getNotificationData($exportMessage),
+                false
+            )
+        );
 
-        $size = $this->fileGenerator->getFilesize();
-        $filename = $this->fileGenerator->getFilename();
-        $generatedAt = $this->fileGenerator->getGeneratedAt();
+        $fileInfo = $this->fileGenerator->initFrom($exportMessage)->generate();
+        $fileId = $exportMessage->getData()['file_id'];
+        $this->fileManager->updateFrom($fileId, $fileInfo);
+        $this->notifier->send(
+            new Notification(
+                ['files/' . $username],
+                $this->getFileData($fileInfo),
+                true,
+                'file-created'
+            )
+        );
 
-        $file = $this->fileManager->findOneBy(['filename' => $filename]);
-        $file
-            ->setStatus(File::STATUS_READY)
-            ->setSize($size)
-            ->setExportedAt((new \DateTimeImmutable())->setTimestamp($generatedAt));
-        $this->fileManager->save($file);
+        $this->notifier->send(
+            new Notification(
+                ['files/' . $username],
+                $this->getCountData($username),
+                true,
+                'counter'
+            )
+        );
 
-        $username = $exportMessage->getUser()->getUserIdentifier();
+        $exportMessage->setTemplate(NotificationType::TEMPLATE_EXPORT_END);
+        $notification = $this->notificationManager->createFrom($exportMessage);
+        $exportMessage->setData([
+            'notification_id' => $notification->getId(),
+            'notification_content' => $notification->getContent()
+        ]);
 
-        $topic = $this->parameterBag->get('topic_url') . '/files/' . $username;
-        $data = [
-            'timestamp' => $generatedAt,
-            'filename' => $filename,
-            'size' => $size
+        $this->notifier->send(
+            new Notification(
+                ['notifications'],
+                $this->getNotificationData($exportMessage),
+                false
+            )
+        );
+    }
+
+    private function getNotificationData(ExportMessage $exportMessage): array
+    {
+        return [
+            'id' => $exportMessage->getData()['notification_id'],
+            'message' => $exportMessage->getData()['notification_content'],
+            'link' => $this->router->generate('download_file', ['filename' => $exportMessage->getFilename()])
         ];
-        $this->publisher->publish($topic, $data, true, 'creating-file');
+    }
 
-        $data = ['counter' => $this->counter->decrease($username)];
-        $this->publisher->publish($topic, $data, true, 'counter');
+    private function getFileData(FileInfo $fileInfo): array
+    {
+        return [
+            'timestamp' => $fileInfo->getGeneratedAt(),
+            'filename' => $fileInfo->getFilename(),
+            'size' => $fileInfo->getFilesize()
+        ];
+    }
+
+    private function getCountData(string $username): array
+    {
+        return ['counter' => $this->counter->decrease($username)];
     }
 }

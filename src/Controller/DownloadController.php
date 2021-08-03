@@ -17,7 +17,7 @@ class DownloadController extends AbstractController
      */
     public function download(string $filename): BinaryFileResponse
     {
-        $csvDir = $this->getParameter('kernel.project_dir') . '/public/csv/';
+        $csvDir = $this->getParameter('kernel.project_dir') . $this->getParameter('destination_folder');
 
         $response = new  BinaryFileResponse($csvDir.$filename);
         $response->headers->set('Content-Type', 'text/csv');

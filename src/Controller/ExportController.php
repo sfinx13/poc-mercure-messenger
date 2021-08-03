@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\NotificationType;
 use App\Manager\FileManager;
+use App\Manager\NotificationManager;
 use App\Message\ExportMessage;
 use App\Service\Counter;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,20 +19,20 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ExportController extends AbstractController
 {
-    protected MessageBusInterface $messageBus;
-    protected EntityManagerInterface $entityManager;
-    protected FileManager $fileManager;
-    protected Counter $counter;
+    private MessageBusInterface $messageBus;
+    private FileManager $fileManager;
+    private NotificationManager $notificationManager;
+    private Counter $counter;
 
     public function __construct(
         MessageBusInterface $messageBus,
-        EntityManagerInterface $entityManager,
         FileManager $fileManager,
+        NotificationManager $notificationManager,
         Counter $counter
     ) {
         $this->messageBus = $messageBus;
-        $this->entityManager = $entityManager;
         $this->fileManager = $fileManager;
+        $this->notificationManager = $notificationManager;
         $this->counter = $counter;
     }
 
@@ -48,14 +49,19 @@ class ExportController extends AbstractController
         $filename = 'export_' . $username. '_' . $startDate->getTimestamp() . '.csv';
 
         $exportMessage = (new ExportMessage())
-            ->setUser($this->getUser())
+            ->setUsername($username)
             ->setStartDate($startDate)
             ->setFilename($filename)
+            ->setTemplate(NotificationType::TEMPLATE_EXPORT_START)
             ->setInterval($args['interval']);
 
-        $file = $this->fileManager->createNew($exportMessage);
-        $this->fileManager->save($file);
-
+        $file = $this->fileManager->createFrom($exportMessage);
+        $notification = $this->notificationManager->createFrom($exportMessage);
+        $exportMessage->setData([
+            'notification_id' => $notification->getId(),
+            'notification_content' => $notification->getContent(),
+            'file_id' => $file->getId()
+        ]);
         $this->messageBus->dispatch($exportMessage);
         return $this->json($this->counter->increase($username), Response::HTTP_OK);
     }

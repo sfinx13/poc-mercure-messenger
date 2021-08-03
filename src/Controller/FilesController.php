@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\NotificationType;
 use App\Message\DeleteMessage;
 use App\Repository\FileRepository;
 use App\Security\CookieGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,8 +28,8 @@ class FilesController extends AbstractController
         );
 
         $topics = [
-            $this->getParameter('topic_url') . '/files/' . $this->getUser()->getUserIdentifier(),
-            $this->getParameter('topic_url') . '/message'
+            $this->getParameter('topic_url') . 'files/' . $this->getUser()->getUserIdentifier(),
+            $this->getParameter('topic_url') . 'message'
         ];
 
         $response = $this->render('home/index.html.twig', [
@@ -45,11 +45,11 @@ class FilesController extends AbstractController
     /**
      * @Route("/files", name="delete_files", methods={"DELETE"})
      */
-    public function removeAll(
-        MessageBusInterface $messageBus,
-        Request $request
-    ): JsonResponse {
-        $deleteMessage = (new DeleteMessage())->setUser($this->getUser());
+    public function removeAll(MessageBusInterface $messageBus): JsonResponse
+    {
+        $deleteMessage = (new DeleteMessage())
+            ->setUsername($this->getUser())
+            ->setTemplate(NotificationType::TEMPLATE_DELETE_FILES);
 
         $messageBus->dispatch($deleteMessage);
 
@@ -63,7 +63,7 @@ class FilesController extends AbstractController
         MessageBusInterface $messageBus,
         string $filename
     ): JsonResponse {
-        $deleteMessage = (new DeleteMessage())->setFilename($filename)->setUser($this->getUser());
+        $deleteMessage = (new DeleteMessage())->setFilename($filename)->setUsername($this->getUser());
 
         $messageBus->dispatch($deleteMessage);
 

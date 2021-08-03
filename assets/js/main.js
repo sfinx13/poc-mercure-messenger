@@ -1,14 +1,15 @@
 const APP_URL = process.env.APP_URL;
-const TOPICS = JSON.parse(document.querySelector('table').dataset.topics);
+const TOPICS = JSON.parse(document.querySelector('section').dataset.topics);
 
-(async ()  =>  {
+(async () => {
     const SUBSCRIBE_URL = new URL(process.env.MERCURE_HUB_URL);
-    TOPICS.forEach( topic => {
+    TOPICS.forEach(topic => {
         SUBSCRIBE_URL.searchParams.append('topic', topic);
     })
 
     const response = await fetch(process.env.MERCURE_HUB_URL + "/subscriptions", {
-        mode: 'no-cors'
+        mode: 'no-cors',
+        credentials: 'include'
     });
     let data = null;
 
@@ -23,7 +24,7 @@ const TOPICS = JSON.parse(document.querySelector('table').dataset.topics);
         withCredentials: true,
     });
 
-    eventSource.addEventListener('delete-files', (messageEvent) => {
+    eventSource.addEventListener('files-deleted', (messageEvent) => {
         const data = JSON.parse(messageEvent.data);
         if (data.hasOwnProperty('message')) {
             removeTableRows('table#export-list tbody tr');
@@ -48,7 +49,7 @@ const TOPICS = JSON.parse(document.querySelector('table').dataset.topics);
             progressBar.textContent = `${percentage}% Complete`;
         }
     })
-    eventSource.addEventListener('creating-file', (messageEvent) => {
+    eventSource.addEventListener('file-created', (messageEvent) => {
         const data = JSON.parse(messageEvent.data);
         if (data.hasOwnProperty('filename')) {
             const currentDate = new Date().toLocaleString();
@@ -92,7 +93,6 @@ let countClick = 0;
 exportNumber.innerHTML = countClick.toString();
 
 function displayCount(counter) {
-    console.log(counter);
     exportNumber.innerHTML = counter;
 }
 
@@ -122,23 +122,21 @@ function addTableRow(filename, size, exportedAt) {
 }
 
 function exportFile() {
-    const projectId = Math.floor(Math.random() * 100);
     const interval = Math.floor(Math.random() * 10);
     const startDate = new Date().toISOString();
-    const url = `${APP_URL}/app/export?project-id=${projectId}&start-date=${startDate}&interval=${interval}`;
+    const url = `${APP_URL}/app/export?start-date=${startDate}&interval=${interval}`;
 
     fetch(url, {
         mode: 'no-cors'
     })
         .then(response => {
-            console.log(response);
             if (200 === response.status) {
                 showMessage('success', 'Export will start in few minutes...', 2000);
                 return response.json();
             } else {
                 showMessage('danger', 'Something went wrong on the API', 2000);
             }
-        }).then( data => displayCount(data));
+        }).then(data => displayCount(data));
 }
 
 function deleteFiles() {

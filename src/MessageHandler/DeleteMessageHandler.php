@@ -5,50 +5,67 @@ namespace App\MessageHandler;
 use App\Manager\FileManager;
 use App\Manager\NotificationManager;
 use App\Message\DeleteMessage;
+use App\Notification\Notification;
+use App\Notification\Notifier;
 use App\Service\Counter;
-use App\Service\Publisher;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Security\Core\Security;
 
 class DeleteMessageHandler implements MessageHandlerInterface
 {
-    private ParameterBagInterface $parameterBag;
     private Counter $counter;
+
     private FileManager $fileManager;
-    private Publisher $publisher;
+
     private NotificationManager $notificationManager;
 
+    private Notifier $notifier;
+
+    private Security $security;
+
     public function __construct(
-        ParameterBagInterface $parameterBag,
-        Publisher $publisher,
         Counter $counter,
         FileManager $fileManager,
-        NotificationManager $notificationManager
+        NotificationManager $notificationManager,
+        Notifier $notifier,
+        Security $security
     ) {
-        $this->parameterBag = $parameterBag;
-        $this->publisher = $publisher;
         $this->counter = $counter;
         $this->fileManager = $fileManager;
         $this->notificationManager = $notificationManager;
+        $this->notifier = $notifier;
+        $this->security = $security;
     }
 
     public function __invoke(DeleteMessage $deleteMessage)
     {
-        if (!empty($deleteMessage->getFilename())) {
-            $this->fileManager->removeFromFilename($deleteMessage->getFilename());
-            $this->notificationManager->createNotification($deleteMessage, 'delete-file');
-        }
+        $this->fileManager->removeFromUser($this->security->getUser());
+        $notification = $this->notificationManager->createFrom($deleteMessage);
 
-        $this->fileManager->removeFromUser($deleteMessage->getUser());
-        $username = $deleteMessage->getUser()->getUserIdentifier();
+        $this->notifier->send(
+            new Notification(
+                ['files/'.$deleteMessage->getUsername()],
+                ['message' => 'All files has been deleted'],
+                true,
+                'files-deleted'
+            )
+        );
 
-        $data['message'] = 'All files has been deleted';
-        $topic = $this->parameterBag->get('topic_url') . '/files/' . $username;
-        $this->publisher->publish($topic, $data, true, 'delete-files');
+        $username = $deleteMessage->getUsername();
+        $this->notifier->send(
+            new Notification(
+            ['files/'.$username],
+            ['counter' => $this->counter->reset($username)],
+            true,
+            'files-deleted'
+        )
+        );
 
-        $data = ['counter' => $this->counter->reset($username)];
-        $this->publisher->publish($topic, $data, true, 'delete-files');
+        $data = [
+            'id' => $notification->getId(),
+            'message' => $notification->getContent()
+        ];
 
-        $this->fileManager->removeFromUser($deleteMessage->getUser());
+        $this->notifier->send(new Notification(['notifications'], $data, false));
     }
 }

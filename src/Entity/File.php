@@ -29,7 +29,7 @@ class File
     private string $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="notifications")
+     * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private User $user;

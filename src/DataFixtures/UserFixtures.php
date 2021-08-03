@@ -17,7 +17,7 @@ class UserFixtures extends Fixture
         $this->passwordHasher = $passwordHasher;
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $dummyData = Yaml::parseFile(__DIR__.'/Data/user.yaml');
 

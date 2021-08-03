@@ -6,54 +6,47 @@ use App\Entity\Notification;
 use App\Entity\NotificationType;
 use App\Message\MessageInterface;
 use App\Repository\NotificationTypeRepository;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class NotificationFactory
 {
     private NotificationTypeRepository $notificationTypeRepository;
-    private Security $security;
 
-    public function __construct(NotificationTypeRepository $notificationTypeRepository, Security $security)
+    public function __construct(NotificationTypeRepository $notificationTypeRepository)
     {
         $this->notificationTypeRepository = $notificationTypeRepository;
-        $this->security = $security;
     }
 
-    public function createInstance(string $notificationTemplate, MessageInterface $message = null): Notification
+    public function createInstanceFrom(MessageInterface $message): Notification
     {
-        $notificationType = $this->notificationTypeRepository->findOneBy(['slug' => $notificationTemplate]);
+        $notificationType = $this->notificationTypeRepository->findOneBy(['slug' => $message->getTemplate()]);
         if (!$notificationType instanceof NotificationType) {
             return new Notification();
         }
 
-        $template = $notificationType->getTemplate();
-        if ($message !== null) {
-            return $this->createInstanceFromMessage($message, $template);
-        }
-
-        return $this->createInstanceFromUser($this->security->getUser(), $template);
-    }
-
-    private function createInstanceFromMessage(MessageInterface $message, string $template): Notification
-    {
-        $content = str_replace(
-            ["{{user}}", "{{filename}}"],
-            [$message->getUser()->getUserIdentifier(), $message->getFilename()],
-            $template);
+        $content = str_replace(["[USER]", "[FILENAME]"], [
+            $message->getUsername(), $message->getFilename(),
+        ], $notificationType->getTemplate());
 
         return (new Notification())
             ->setContent($content)
-            ->setUser($message->getUser())
+            ->setLink($message->getFilename())
+            ->setUsername($message->getUsername())
             ->setSender('app');
     }
 
-    private function createInstanceFromUser(User $user, string $template): Notification
+    public function createInstanceFromUser(UserInterface $user, string $template): Notification
     {
-        $content = str_replace("{{user}}", $user->getUserIdentifier(), $template);
+        $notificationType = $this->notificationTypeRepository->findOneBy(['slug' => $template]);
+        if (!$notificationType instanceof NotificationType) {
+            return new Notification();
+        }
+
+        $content = str_replace("[USER]", $user->getUserIdentifier(), $notificationType->getTemplate());
 
         return (new Notification())
             ->setContent($content)
-            ->setUser($user)
+            ->setUsername($user->getUserIdentifier())
             ->setSender('app');
     }
 }

@@ -5,9 +5,8 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use App\Traits\ActivableTrait;
 use App\Traits\TimestampableTrait;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
@@ -15,7 +14,7 @@ use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\HasLifecycleCallbacks()
  */
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use TimestampableTrait;
     use ActivableTrait;
@@ -27,11 +26,6 @@ class User implements UserInterface
      * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      */
     private string $id;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="user")
-     */
-    private $notifications;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
@@ -52,11 +46,6 @@ class User implements UserInterface
      * @ORM\Column(type="json")
      */
     private $roles = [];
-
-    public function __construct()
-    {
-        $this->notifications = new ArrayCollection();
-    }
 
     public function getId(): string
     {
@@ -126,9 +115,9 @@ class User implements UserInterface
         return $this->getUsername();
     }
 
-
-    public function getNotifications(): ?Collection
+    public function __toString()
     {
-        return $this->notifications;
+        return $this->username;
     }
+
 }

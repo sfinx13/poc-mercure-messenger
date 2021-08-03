@@ -2,6 +2,8 @@
 
 namespace App\Command;
 
+use App\Notification\Notification;
+use App\Notification\Notifier;
 use Faker\Factory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,17 +19,14 @@ class SendNotificationCommand extends Command
     protected static $defaultName = 'app:send-notif';
     protected static $defaultDescription = 'Publish a notification';
 
-    protected HubInterface $hub;
-    protected ParameterBagInterface $parameterBag;
+    protected Notifier $notifier;
 
     public function __construct(
-        HubInterface $hub,
-        ParameterBagInterface $parameterBag,
+        Notifier $notifier,
         string $name = null
     ) {
         parent::__construct($name);
-        $this->hub = $hub;
-        $this->parameterBag = $parameterBag;
+        $this->notifier = $notifier;
     }
 
     protected function configure(): void
@@ -50,12 +49,7 @@ class SendNotificationCommand extends Command
         $faker = Factory::create();
 
         for ($i = 0; $i < $input->getOption('iterations'); $i++) {
-            $messageUpdate = new Update(
-                $this->parameterBag->get('topic_url') . '/message',
-                json_encode(['message' => $faker->text()]),
-                true,
-            );
-            $this->hub->publish($messageUpdate);
+            $this->notifier->send(new Notification(['message'], ['message' => $faker->text()], true));
         }
 
         $io->success('Message(s) has/have been published to the hub');

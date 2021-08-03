@@ -2,33 +2,44 @@
 
 namespace App\Message;
 
-use App\Entity\User;
-
 class DeleteMessage implements MessageInterface
 {
-    protected User $user;
+    private string $username;
 
-    protected string $filename;
+    private ?string $filename;
 
-    public function getFilename(): string
+    private ?string $template;
+
+    public function getUsername(): string
     {
-        return $this->filename;
+        return $this->username;
     }
 
-    public function setFilename(string $filename): self
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+        return $this;
+    }
+
+    public function getFilename(): ?string
+    {
+        return $this->filename?? null;
+    }
+
+    public function setFilename(?string $filename): self
     {
         $this->filename = $filename;
         return $this;
     }
 
-    public function getUser(): User
+    public function getTemplate(): string
     {
-        return $this->user;
+        return $this->template;
     }
 
-    public function setUser(User $user): self
+    public function setTemplate(string $template): self
     {
-        $this->user = $user;
+        $this->template = $template;
         return $this;
     }
 }

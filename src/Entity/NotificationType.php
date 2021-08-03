@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\NotificationTypeRepository;
 use App\Traits\ActivableTrait;
 use App\Traits\TimestampableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
@@ -16,6 +17,10 @@ class NotificationType
 {
     use TimestampableTrait;
     use ActivableTrait;
+
+    public const TEMPLATE_EXPORT_START = 'export-file-start';
+    public const TEMPLATE_EXPORT_END = 'export-file-end';
+    public const TEMPLATE_DELETE_FILES = 'delete-file';
 
     /**
      * @ORM\Id

@@ -6,6 +6,7 @@ use App\Entity\File;
 use App\Entity\User;
 use App\Factory\FileFactory;
 use App\Message\ExportMessage;
+use App\Model\FileInfo;
 use App\Repository\FileRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -30,12 +31,22 @@ class FileManager extends AbstractManager
         $this->parameterBag = $parameterBag;
     }
 
-    public function createNew(ExportMessage $exportMessage): File
+    public function createFrom(ExportMessage $exportMessage): File
     {
-        $file = $this->fileFactory->createInstance($exportMessage);
+        $file = $this->fileFactory->createInstanceFrom($exportMessage);
         $this->save($file);
 
         return $file;
+    }
+
+    public function updateFrom(string $fileId, FileInfo $fileInfo)
+    {
+        $file = $this->fileRepository->find($fileId);
+        $file
+            ->setStatus(File::STATUS_READY)
+            ->setSize($fileInfo->getFilesize())
+            ->setExportedAt((new \DateTimeImmutable())->setTimestamp($fileInfo->getGeneratedAt()));
+        $this->save($file);
     }
 
     public function findOneBy(array $criteria): ?File

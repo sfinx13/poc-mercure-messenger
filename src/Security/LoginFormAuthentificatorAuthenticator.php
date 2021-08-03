@@ -3,6 +3,8 @@
 namespace App\Security;
 
 use App\Manager\NotificationManager;
+use App\Notification\Notification;
+use App\Notification\Notifier;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,11 +26,16 @@ class LoginFormAuthentificatorAuthenticator extends AbstractLoginFormAuthenticat
     public const LOGIN_ROUTE = 'app_login';
 
     private UrlGeneratorInterface $urlGenerator;
+
     private NotificationManager $notificationManager;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    private Notifier $notifier;
+
+    public function __construct(UrlGeneratorInterface $urlGenerator, NotificationManager $notificationManager, Notifier $notifier)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->notificationManager = $notificationManager;
+        $this->notifier = $notifier;
     }
 
     public function authenticate(Request $request): PassportInterface
@@ -52,8 +59,15 @@ class LoginFormAuthentificatorAuthenticator extends AbstractLoginFormAuthenticat
             return new RedirectResponse($targetPath);
         }
 
-        $this->notificationManager->createNotification('login');
-        return new RedirectResponse($this->urlGenerator->generate('get_files'));
+        if (!in_array('ROLE_ADMIN', $token->getUser()->getRoles(), true)) {
+            $notification = $this->notificationManager->createFromUser($token->getUser(), 'login');
+            $data['message'] = $notification->getContent();
+            $this->notifier->send(new Notification(['notifications'], $data, false));
+
+            return new RedirectResponse($this->urlGenerator->generate('get_files'));
+        }
+
+        return new RedirectResponse($this->urlGenerator->generate('get_notifications'));
     }
 
     protected function getLoginUrl(Request $request): string

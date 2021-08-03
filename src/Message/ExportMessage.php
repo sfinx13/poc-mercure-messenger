@@ -2,26 +2,30 @@
 
 namespace App\Message;
 
-use App\Entity\User;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class ExportMessage implements MessageInterface
 {
-    protected User $user;
+    private string $username;
 
-    protected string $filename;
+    private string $filename;
 
-    protected int $interval;
+    private string $template;
 
-    protected \DateTime $startDate;
+    private int $interval;
 
-    public function getUser(): User
+    private \DateTime $startDate;
+
+    private array $data;
+
+    public function getUsername(): string
     {
-        return $this->user;
+        return $this->username;
     }
 
-    public function setUser(User $user): ExportMessage
+    public function setUsername(string $username): self
     {
-        $this->user = $user;
+        $this->username = $username;
         return $this;
     }
 
@@ -30,9 +34,20 @@ class ExportMessage implements MessageInterface
         return $this->filename;
     }
 
-    public function setFilename(string $filename): ExportMessage
+    public function setFilename(string $filename): self
     {
         $this->filename = $filename;
+        return $this;
+    }
+
+    public function getTemplate(): string
+    {
+        return $this->template;
+    }
+
+    public function setTemplate(string $template): self
+    {
+        $this->template = $template;
         return $this;
     }
 
@@ -41,7 +56,7 @@ class ExportMessage implements MessageInterface
         return $this->interval;
     }
 
-    public function setInterval(int $interval): ExportMessage
+    public function setInterval(int $interval): self
     {
         $this->interval = $interval;
         return $this;
@@ -52,9 +67,20 @@ class ExportMessage implements MessageInterface
         return $this->startDate;
     }
 
-    public function setStartDate(\DateTime $startDate): ExportMessage
+    public function setStartDate(\DateTime $startDate): self
     {
         $this->startDate = $startDate;
+        return $this;
+    }
+
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    public function setData(array $data): ExportMessage
+    {
+        $this->data = $data;
         return $this;
     }
 }

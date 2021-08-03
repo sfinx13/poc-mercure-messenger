@@ -2,10 +2,11 @@
 
 namespace App\Message;
 
-use App\Entity\User;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 interface MessageInterface
 {
-    public function getFilename(): string;
-    public function getUser(): User;
+    public function getFilename(): ?string;
+    public function getUsername(): string;
+    public function getTemplate(): ?string;
 }

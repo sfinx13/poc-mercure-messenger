@@ -1,7 +1,7 @@
 run:
 	@bash -l -c 'docker-compose up -d'
 
-data: build-db reload
+rebuild-data: build-db reload-data
 
 shutdown:
 	@bash -l -c 'docker-compose down'
@@ -21,8 +21,14 @@ mysql:
 mercure:
 	@bash -l -c 'docker-compose exec caddy sh'
 
+create-db:
+	@docker-compose exec php-fpm sh -c "bin/console --env=dev doctrine:database:create --no-interaction"
+
 build-db:
 	@docker-compose exec php-fpm sh -c "bin/console --env=dev doctrine:migrations:migrate --no-interaction"
 
-reload:
+reload-data:
 	@docker-compose exec php-fpm sh -c "bin/console --env=dev doctrine:fixtures:load --no-interaction"
+
+drop-db:
+	@docker-compose exec php-fpm sh -c "bin/console --env=dev doctrine:database:drop --force --no-interaction"

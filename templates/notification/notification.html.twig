@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demo Mercure{% endblock %}
+
+ {% block stylesheets %}
+     {{ encore_entry_link_tags('app') }}
+     <style>
+         div a {
+             color: unset;
+         }
+
+     </style>
+ {% endblock %}
+
+{% block body %}
+<section data-topics="{{ topics|json_encode }}" class="">
+    <h1>Centre de notification</h1>
+    <div id="notification-center">
+        {% for notification in notifications %}
+            <div class="alert alert-dark d-flex flex-wrap" role="alert">
+                <div class="pr-5">{{ notification.createdAt|date('H:i:s') }}</div>
+                <div class="flex-grow-1"><a href="">{{ notification.content }}</a></div>
+
+                {% if 'csv' in notification.content %}
+                    <div class="pl-5">
+                        <a href="{{ path('download_file', {'filename': notification.link }) }}"
+                           class="btn btn-primary active" role="button">Download</a>
+                        <a class="btn btn-secondary active" role="button">Cancel</a>
+                    </div>
+                {% endif %}
+
+
+            </div>
+        {% endfor %}
+    </div>
+    {% endblock %}
+    {% block javascripts %}
+    {{ encore_entry_script_tags('notification') }}
+{% endblock %}
