@@ -54,11 +54,11 @@ class DeleteMessageHandler implements MessageHandlerInterface
         $username = $deleteMessage->getUsername();
         $this->notifier->send(
             new Notification(
-            ['files/'.$username],
-            ['counter' => $this->counter->reset($username)],
-            true,
-            'files-deleted'
-        )
+                ['files/'.$username],
+                ['counter' => $this->counter->reset($username)],
+                true,
+                'files-deleted'
+            )
         );
 
         $data = [

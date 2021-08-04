@@ -34,5 +34,4 @@ class NotificationRepository extends ServiceEntityRepository
             ->getSingleScalarResult()
         ;
     }
-
 }

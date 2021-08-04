@@ -28,9 +28,12 @@ class ApiController extends AbstractController
     /**
      * @Route("/notification/{id}/action", name="read_notification", methods={"PATCH"})
      */
-    public function read(NotificationManager $notificationManager,
-                         Notifier $notifier,
-                         Request $request, int $id): JsonResponse
+    public function read(
+        NotificationManager $notificationManager,
+        Notifier $notifier,
+        Request $request,
+        int $id
+    ): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 

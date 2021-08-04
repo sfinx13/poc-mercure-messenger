@@ -102,7 +102,6 @@ class ExportMessageHandler implements MessageHandlerInterface
 
     private function getNotificationData(ExportMessage $exportMessage): array
     {
-
         return [
             'id' => $exportMessage->getData()['notification_id'],
             'message' => $exportMessage->getData()['notification_content'],
