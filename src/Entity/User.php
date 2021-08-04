@@ -8,7 +8,6 @@ use App\Traits\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -21,11 +20,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
-    private string $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
@@ -47,7 +45,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $roles = [];
 
-    public function getId(): string
+    public function getId(): int
     {
         return $this->id;
     }

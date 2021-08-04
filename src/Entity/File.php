@@ -22,11 +22,10 @@ class File
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
-    private string $id;
+    private int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
@@ -64,7 +63,7 @@ class File
      */
     private int $downloadCount = 0;
 
-    public function getId(): string
+    public function getId(): int
     {
         return $this->id;
     }

@@ -5,35 +5,49 @@
  {% block stylesheets %}
      {{ encore_entry_link_tags('app') }}
      <style>
-         div a {
-             color: unset;
+         .notification-center div[data-id] {
+             cursor: pointer;
+         }
+
+         section {
+             margin-top: 1rem;
          }
 
      </style>
  {% endblock %}
 
 {% block body %}
-<section data-topics="{{ topics|json_encode }}" class="">
-    <h1>Centre de notification</h1>
-    <div id="notification-center">
-        {% for notification in notifications %}
-            <div class="alert alert-dark d-flex flex-wrap" role="alert">
-                <div class="pr-5">{{ notification.createdAt|date('H:i:s') }}</div>
-                <div class="flex-grow-1"><a href="">{{ notification.content }}</a></div>
+    <header>
+        <h1>Centre de notification <span id="count-notifications" class="badge badge-danger">{{ count_notifications }}</span></h1>
+    </header>
 
-                {% if 'csv' in notification.content %}
-                    <div class="pl-5">
-                        <a href="{{ path('download_file', {'filename': notification.link }) }}"
-                           class="btn btn-primary active" role="button">Download</a>
-                        <a class="btn btn-secondary active" role="button">Cancel</a>
-                    </div>
-                {% endif %}
+    <section data-topics="{{ topics|json_encode }}" class="mt-200">
 
-
-            </div>
-        {% endfor %}
-    </div>
-    {% endblock %}
-    {% block javascripts %}
-    {{ encore_entry_script_tags('notification') }}
+        <div id="notification-center" class="notification-center">
+            {% for notification in notifications %}
+                <div data-id="{{ notification.id }}" data-action="is_read"
+                     class="alert alert-dark d-flex flex-wrap {{ notification.readedAt != null ? 'read' }}"
+                     role="alert">
+                    <div class="pr-5">{{ notification.createdAt|date('H:i:s') }}</div>
+                    <div class="content flex-grow-1">{{ notification.content }}</div>
+                    {% if 'csv' in notification.content %}
+                        <div class="pl-5 action {{ notification.processedAt != null ? 'process' }}">
+                            <a data-id="{{ notification.id }}"
+                               data-action="is_processed"
+                               href="{{ path('download_file', {'filename': notification.link }) }}"
+                               class="btn btn-primary active"
+                               role="button">Télécharger</a>
+                            <a data-id="{{ notification.id }}"
+                               data-action="is_processed"
+                               class="btn btn-secondary active"
+                               role="button">Annuler</a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </section>
 {% endblock %}
+    {% block javascripts %}
+        {{ encore_entry_script_tags('notification') }}
+    {% endblock %}

@@ -11,6 +11,7 @@ use App\Message\ExportMessage;
 use App\Model\FileInfo;
 use App\Notification\Notification;
 use App\Notification\Notifier;
+use App\Repository\NotificationRepository;
 use App\Service\Counter;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -29,13 +30,16 @@ class ExportMessageHandler implements MessageHandlerInterface
 
     private NotificationManager $notificationManager;
 
+    private NotificationRepository $notificationRepository;
+
     public function __construct(
         UrlGeneratorInterface $router,
         Notifier             $notifier,
         Counter               $counter,
         FileGenerator         $fileGenerator,
         FileManager           $fileManager,
-        NotificationManager   $notificationManager
+        NotificationManager   $notificationManager,
+        NotificationRepository   $notificationRepository
     ) {
         $this->router = $router;
         $this->notifier = $notifier;
@@ -43,6 +47,7 @@ class ExportMessageHandler implements MessageHandlerInterface
         $this->fileGenerator = $fileGenerator;
         $this->fileManager = $fileManager;
         $this->notificationManager = $notificationManager;
+        $this->notificationRepository = $notificationRepository;
     }
 
     public function __invoke(ExportMessage $exportMessage)
@@ -57,8 +62,10 @@ class ExportMessageHandler implements MessageHandlerInterface
         );
 
         $fileInfo = $this->fileGenerator->initFrom($exportMessage)->generate();
+
         $fileId = $exportMessage->getData()['file_id'];
         $this->fileManager->updateFrom($fileId, $fileInfo);
+
         $this->notifier->send(
             new Notification(
                 ['files/' . $username],
@@ -95,10 +102,14 @@ class ExportMessageHandler implements MessageHandlerInterface
 
     private function getNotificationData(ExportMessage $exportMessage): array
     {
+
         return [
             'id' => $exportMessage->getData()['notification_id'],
             'message' => $exportMessage->getData()['notification_content'],
-            'link' => $this->router->generate('download_file', ['filename' => $exportMessage->getFilename()])
+            'link' => $this->router->generate('download_file', [
+                'filename' => $exportMessage->getFilename()
+            ]),
+            'count_notifications' => $this->notificationRepository->countNotificationNotProcessed()
         ];
     }
 

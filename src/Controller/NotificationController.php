@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Manager\NotificationManager;
 use App\Repository\NotificationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +26,7 @@ class NotificationController extends AbstractController
 
         return $this->render('notification/notification.html.twig', [
             'notifications' => $notifications,
+            'count_notifications' => (int)$notificationRepository->countNotificationNotProcessed(),
             'topics' => $topics
         ]);
     }

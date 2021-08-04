@@ -24,11 +24,10 @@ class NotificationType
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
-    private string $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -50,7 +49,7 @@ class NotificationType
      */
     private string $template;
 
-    public function getId(): string
+    public function getId(): int
     {
         return $this->id;
     }
