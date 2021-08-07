@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notification;
+namespace App\Service\Notification;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mercure\HubInterface;

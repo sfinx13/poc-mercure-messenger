@@ -1,7 +1,7 @@
+build: destroy setup run composer npm-install npm-build sleep build-db reload-data restart
+
 run:
 	@bash -l -c 'docker-compose up -d'
-
-rebuild-data: build-db reload-data
 
 shutdown:
 	@bash -l -c 'docker-compose down'
@@ -21,6 +21,8 @@ mysql:
 mercure:
 	@bash -l -c 'docker-compose exec caddy sh'
 
+rebuild-database: drop-db sleep create-db build-db reload-data
+
 create-db:
 	@docker-compose exec php-fpm sh -c "bin/console --env=dev doctrine:database:create --no-interaction"
 
@@ -32,3 +34,21 @@ reload-data:
 
 drop-db:
 	@docker-compose exec php-fpm sh -c "bin/console --env=dev doctrine:database:drop --force --no-interaction"
+
+sleep:
+	@bash -l -c 'sleep 15'
+
+setup:
+	@docker-compose build
+
+destroy:
+	@docker-compose rm -v --force --stop || true
+
+composer:
+	@docker-compose exec php-fpm sh -c "composer install --dev --no-interaction -o"
+
+npm-install:
+	@docker-compose exec php-fpm sh -c "npm install"
+
+npm-build:
+	@docker-compose exec php-fpm sh -c "npm run build"

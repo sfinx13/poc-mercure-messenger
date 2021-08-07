@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Notification as EntityNotification;
 use App\Manager\NotificationManager;
-use App\Notification\Notification;
-use App\Notification\Notifier;
+use App\Service\Notification\Notification;
+use App\Service\Notification\Notifier;
 use App\Repository\NotificationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,8 +33,7 @@ class ApiController extends AbstractController
         Notifier $notifier,
         Request $request,
         int $id
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
         /** @var EntityNotification $entityNotification **/

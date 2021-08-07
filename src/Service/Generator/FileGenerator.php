@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Generator;
+namespace App\Service\Generator;
 
 use App\Message\ExportMessage;
 use App\Model\FileInfo;
-use App\Notification\Notifier;
-use App\Notification\Notification;
+use App\Service\Notification\Notifier;
+use App\Service\Notification\Notification;
 use App\Utils\MathHelper;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;

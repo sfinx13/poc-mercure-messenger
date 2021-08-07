@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notification;
+namespace App\Service\Notification;
 
 class Notification
 {
@@ -17,7 +17,7 @@ class Notification
     public function __construct(array $topics, array $data, $private = true, string $eventType = null)
     {
         $this->topics = $topics;
-        $data['createdAt'] = (new \DateTime())->format('H:i:s');
+        $data['created_at'] = (new \DateTime())->format('H:i:s');
         $this->data = $data;
         $this->private = $private;
         $this->eventType = $eventType;

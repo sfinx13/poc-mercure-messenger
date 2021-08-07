@@ -13,26 +13,18 @@ cp .env.dist .env
 
 ## Installation
 
-### Run the app
+### Build the app
 ```bash
-make run
-```
-### Install dependencies
-```bash
-composer install
-npm install
+make build
 ```
 
-### Compile assets for JS/CSS
+## Link
+Login page: http://localhost:8080/login
 
-```bash
-npm run build
-```
+Extract page: http://localhost:8080/app/files
 
-### Load data
-```bash
-make data
-```
+Notification page: http://localhost:8080/app/notifications
+
 ## Command
 
 Send a notification with random message with option if you want to push more messages

@@ -18,7 +18,7 @@ const TOPICS = JSON.parse(document.querySelector('section').dataset.topics);
         const id = data.id;
         const content = data.message;
         const link = data.link;
-        const createdAt = data.createdAt;
+        const createdAt = data.created_at;
         addNotification(id, createdAt, content, link);
         countNotificationElement.textContent = data.count_notifications;
     };
@@ -39,6 +39,12 @@ const TOPICS = JSON.parse(document.querySelector('section').dataset.topics);
                 btnAction.classList.add('process');
                 console.log(btnAction);
             }
+        }
+    });
+
+    window.addEventListener('beforeunload', () => {
+        if (eventSource !== null) {
+            eventSource.close();
         }
     });
 

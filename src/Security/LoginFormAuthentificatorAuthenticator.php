@@ -3,8 +3,8 @@
 namespace App\Security;
 
 use App\Manager\NotificationManager;
-use App\Notification\Notification;
-use App\Notification\Notifier;
+use App\Service\Notification\Notification;
+use App\Service\Notification\Notifier;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -3,8 +3,8 @@
 namespace App\EventSubscriber;
 
 use App\Manager\NotificationManager;
-use App\Notification\Notification;
-use App\Notification\Notifier;
+use App\Service\Notification\Notification;
+use App\Service\Notification\Notifier;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Http\Event\LogoutEvent;
 

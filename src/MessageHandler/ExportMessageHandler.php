@@ -4,13 +4,13 @@ namespace App\MessageHandler;
 
 use App\Entity\Notification as EntityNotification;
 use App\Entity\NotificationType;
-use App\Generator\FileGenerator;
+use App\Service\Generator\FileGenerator;
 use App\Manager\FileManager;
 use App\Manager\NotificationManager;
 use App\Message\ExportMessage;
 use App\Model\FileInfo;
-use App\Notification\Notification;
-use App\Notification\Notifier;
+use App\Service\Notification\Notification;
+use App\Service\Notification\Notifier;
 use App\Repository\NotificationRepository;
 use App\Service\Counter;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;

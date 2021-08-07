@@ -2,8 +2,8 @@
 
 namespace App\Command;
 
-use App\Notification\Notification;
-use App\Notification\Notifier;
+use App\Service\Notification\Notification;
+use App\Service\Notification\Notifier;
 use Faker\Factory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

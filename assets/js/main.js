@@ -7,19 +7,6 @@ const TOPICS = JSON.parse(document.querySelector('section').dataset.topics);
         SUBSCRIBE_URL.searchParams.append('topic', topic);
     })
 
-    const response = await fetch(process.env.MERCURE_HUB_URL + "/subscriptions", {
-        mode: 'no-cors',
-        credentials: 'include'
-    });
-    let data = null;
-
-    /*    try {
-        data = await response.json();
-        SUBSCRIBE_URL.searchParams.append('Last-Event-ID', data.lastEventID);
-    } catch (error) {
-        console.log(error);
-    }
-*/
     const eventSource = new EventSource(SUBSCRIBE_URL.toString(), {
         withCredentials: true,
     });

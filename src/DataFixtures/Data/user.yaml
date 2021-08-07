@@ -12,9 +12,9 @@ users:
     roles:
       - ROLE_USER
   -
-    username: demo-3
-    email: demo-3@yopmail.com
-    password: demo-3
+    username: admin
+    email: admin@yopmail.com
+    password: admin
     roles:
       - ROLE_ADMIN
       - ROLE_USER

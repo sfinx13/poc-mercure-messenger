@@ -6,6 +6,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         zlib1g-dev \
         libxml2-dev \
         libzip-dev \
+        && curl -fsSL https://deb.nodesource.com/setup_lts.x | bash \
+        && apt-get install -y  nodejs \
          # Install intl
         && docker-php-ext-configure intl \
         && docker-php-ext-install -j2 intl \

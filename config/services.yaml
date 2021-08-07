@@ -8,6 +8,7 @@ parameters:
     app_url: '%env(APP_URL)%'
     topic_url: '%env(TOPIC_URL)%'
     destination_folder: '%env(DESTINATION_FOLDER)%'
+    jwt_secret: '%env(MERCURE_JWT_SECRET)%'
 
 services:
     # default configuration for services in *this* file
