@@ -9,15 +9,8 @@ use Symfony\Component\Uid\Uuid;
 
 class Notifier
 {
-    private HubInterface $hub;
 
-    private ParameterBagInterface $parameterBag;
-
-    public function __construct(HubInterface $hub, ParameterBagInterface $parameterBag)
-    {
-        $this->hub = $hub;
-        $this->parameterBag = $parameterBag;
-    }
+    public function __construct(private HubInterface $hub, private ParameterBagInterface $parameterBag) {}
 
     /**
      * @throws \JsonException

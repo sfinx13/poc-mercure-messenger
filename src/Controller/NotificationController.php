@@ -8,14 +8,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("app")
- */
+#[Route('app')]
 class NotificationController extends AbstractController
 {
-    /**
-     * @Route("/notifications", name="get_notifications", methods={"GET"})
-     */
+    #[Route('/notifications', name:'get_notifications', methods: 'GET')]
     public function getNotifications(NotificationRepository $notificationRepository): Response
     {
         $notifications = $notificationRepository->findBy(['trashedAt' => null, 'active' => 1], ['createdAt' => 'DESC']);

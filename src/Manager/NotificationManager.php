@@ -10,14 +10,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class NotificationManager extends AbstractManager
 {
-    private NotificationFactory $notificationFactory;
-
     public function __construct(
         EntityManagerInterface $entityManager,
-        NotificationFactory    $notificationFactory
+        private NotificationFactory    $notificationFactory
     ) {
         parent::__construct($entityManager);
-        $this->notificationFactory = $notificationFactory;
     }
 
     public function createFrom(MessageInterface $message): Notification

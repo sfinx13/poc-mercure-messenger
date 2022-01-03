@@ -13,29 +13,13 @@ use Symfony\Component\Security\Core\Security;
 
 class DeleteMessageHandler implements MessageHandlerInterface
 {
-    private Counter $counter;
-
-    private FileManager $fileManager;
-
-    private NotificationManager $notificationManager;
-
-    private Notifier $notifier;
-
-    private Security $security;
-
     public function __construct(
-        Counter $counter,
-        FileManager $fileManager,
-        NotificationManager $notificationManager,
-        Notifier $notifier,
-        Security $security
-    ) {
-        $this->counter = $counter;
-        $this->fileManager = $fileManager;
-        $this->notificationManager = $notificationManager;
-        $this->notifier = $notifier;
-        $this->security = $security;
-    }
+        private Counter $counter,
+        private FileManager $fileManager,
+        private NotificationManager $notificationManager,
+        private Notifier $notifier,
+        private Security $security
+    ) {}
 
     public function __invoke(DeleteMessage $deleteMessage)
     {

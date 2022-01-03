@@ -21,19 +21,11 @@ class FileGenerator
 
     private string $destinationFolder;
 
-    private ParameterBagInterface $parameterBag;
-    private Notifier $notifier;
-    private LoggerInterface $logger;
-
     public function __construct(
-        ParameterBagInterface $parameterBag,
-        Notifier              $notifier,
-        LoggerInterface       $logger
-    ) {
-        $this->notifier = $notifier;
-        $this->logger = $logger;
-        $this->parameterBag = $parameterBag;
-    }
+        private ParameterBagInterface $parameterBag,
+        private Notifier              $notifier,
+        private LoggerInterface       $logger
+    ) {}
 
     public function initFrom(ExportMessage $exportMessage): self
     {

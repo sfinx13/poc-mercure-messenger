@@ -13,21 +13,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("api")
- */
+#[Route('api')]
 class ApiController extends AbstractController
 {
     private NotificationRepository $notificationRepository;
 
-    public function __construct(NotificationRepository $notificationRepository, NotificationManager $notificationManager)
+    public function __construct(NotificationRepository $notificationRepository)
     {
         $this->notificationRepository = $notificationRepository;
     }
 
-    /**
-     * @Route("/notification/{id}/action", name="read_notification", methods={"PATCH"})
-     */
+    #[Route('/notification/{id}/action', name:'read_notification', methods: 'PATCH')]
     public function read(
         NotificationManager $notificationManager,
         Notifier $notifier,

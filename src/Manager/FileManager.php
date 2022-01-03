@@ -14,21 +14,13 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class FileManager extends AbstractManager
 {
-    protected EntityManagerInterface $entityManager;
-    protected FileRepository $fileRepository;
-    protected FileFactory $fileFactory;
-    protected ParameterBagInterface $parameterBag;
-
     public function __construct(
-        EntityManagerInterface $entityManager,
-        FileRepository $fileRepository,
-        FileFactory $fileFactory,
-        ParameterBagInterface $parameterBag
+        protected EntityManagerInterface $entityManager,
+        protected FileRepository $fileRepository,
+        protected FileFactory $fileFactory,
+        protected ParameterBagInterface $parameterBag
     ) {
         parent::__construct($entityManager);
-        $this->fileRepository = $fileRepository;
-        $this->fileFactory = $fileFactory;
-        $this->parameterBag = $parameterBag;
     }
 
     public function createFrom(ExportMessage $exportMessage): File

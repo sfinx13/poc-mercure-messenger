@@ -10,23 +10,17 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Mercure\HubInterface;
-use Symfony\Component\Mercure\Update;
 
 class SendNotificationCommand extends Command
 {
     protected static $defaultName = 'app:send-notif';
     protected static $defaultDescription = 'Publish a notification';
 
-    protected Notifier $notifier;
-
     public function __construct(
-        Notifier $notifier,
+        private Notifier $notifier,
         string $name = null
     ) {
         parent::__construct($name);
-        $this->notifier = $notifier;
     }
 
     protected function configure(): void

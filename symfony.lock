@@ -326,9 +326,6 @@
             "./config/packages/test/monolog.yaml"
         ]
     },
-    "symfony/orm-pack": {
-        "version": "v1.0.8"
-    },
     "symfony/password-hasher": {
         "version": "v5.3.4"
     },
@@ -355,9 +352,6 @@
     },
     "symfony/polyfill-uuid": {
         "version": "v1.23.0"
-    },
-    "symfony/profiler-pack": {
-        "version": "v1.0.4"
     },
     "symfony/property-access": {
         "version": "v5.3.4"
@@ -434,9 +428,6 @@
             "./config/packages/twig.yaml",
             "./templates/base.html.twig"
         ]
-    },
-    "symfony/twig-pack": {
-        "version": "v1.0.0"
     },
     "symfony/uid": {
         "version": "v5.3.3"

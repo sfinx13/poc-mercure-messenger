@@ -8,21 +8,18 @@ use App\Repository\FileRepository;
 use App\Security\CookieGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("app")
- */
+#[Route('app')]
 class FilesController extends AbstractController
 {
-    /**
-     * @Route("/files", name="get_files", methods={"GET"})
-     */
+    #[Route('/files', name: 'get_files', methods: 'GET')]
     public function getFiles(FileRepository $fileRepository, CookieGenerator $cookieGenerator): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $files = $fileRepository->findBy(
             ['user' => $this->getUser()],
             ['exportedAt' => 'desc']
@@ -43,9 +40,7 @@ class FilesController extends AbstractController
         return $response;
     }
 
-    /**
-     * @Route("/files", name="delete_files", methods={"DELETE"})
-     */
+    #[Route('/files', name: 'delete_files', methods: 'DELETE')]
     public function removeAll(MessageBusInterface $messageBus): JsonResponse
     {
         $deleteMessage = (new DeleteMessage())
@@ -57,9 +52,7 @@ class FilesController extends AbstractController
         return $this->json(null, Response::HTTP_NO_CONTENT);
     }
 
-    /**
-     * @Route("/files/{filename}", name="delete_file", methods={"DELETE"})
-     */
+    #[Route('/files/{filename}', name: 'delete_file', methods: 'DELETE')]
     public function remove(
         MessageBusInterface $messageBus,
         string $filename

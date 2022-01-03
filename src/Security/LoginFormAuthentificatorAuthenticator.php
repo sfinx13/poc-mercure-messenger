@@ -25,18 +25,11 @@ class LoginFormAuthentificatorAuthenticator extends AbstractLoginFormAuthenticat
 
     public const LOGIN_ROUTE = 'app_login';
 
-    private UrlGeneratorInterface $urlGenerator;
-
-    private NotificationManager $notificationManager;
-
-    private Notifier $notifier;
-
-    public function __construct(UrlGeneratorInterface $urlGenerator, NotificationManager $notificationManager, Notifier $notifier)
-    {
-        $this->urlGenerator = $urlGenerator;
-        $this->notificationManager = $notificationManager;
-        $this->notifier = $notifier;
-    }
+    public function __construct(
+        private UrlGeneratorInterface $urlGenerator,
+        private NotificationManager $notificationManager,
+        private Notifier $notifier
+    ) {}
 
     public function authenticate(Request $request): PassportInterface
     {

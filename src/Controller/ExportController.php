@@ -14,9 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("app")
- */
+#[Route('app')]
 class ExportController extends AbstractController
 {
     private MessageBusInterface $messageBus;
@@ -36,9 +34,7 @@ class ExportController extends AbstractController
         $this->counter = $counter;
     }
 
-    /**
-     * @Route("/export", name="export_file")
-     */
+    #[Route('/export', name:'export_file')]
     public function export(
         Request $request
     ): JsonResponse {

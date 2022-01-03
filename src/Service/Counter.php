@@ -7,14 +7,7 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 class Counter
 {
-    protected AdapterInterface $cache;
-    protected EntityManagerInterface $entityManager;
-
-    public function __construct(AdapterInterface $cache, EntityManagerInterface $entityManager)
-    {
-        $this->cache = $cache;
-        $this->entityManager = $entityManager;
-    }
+    public function __construct(private AdapterInterface $cache, private EntityManagerInterface $entityManager) {}
 
     public function current($key): void
     {
