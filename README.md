@@ -19,9 +19,6 @@ make build
 ```
 
 ## Link
-Login page: http://localhost:8080/login
-
-Extract page: http://localhost:8080/app/files
 
 Notification page: http://localhost:8080/app/notifications
 
