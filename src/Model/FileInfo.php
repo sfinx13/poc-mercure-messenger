@@ -4,11 +4,11 @@ namespace App\Model;
 
 class FileInfo
 {
-    private string $filename;
+    private string $filename = '';
 
-    private string $filesize;
+    private string $filesize = '';
 
-    private string $generatedAt;
+    private int $generatedAt = 0;
 
     public function getFilename(): string
     {
@@ -32,12 +32,12 @@ class FileInfo
         return $this;
     }
 
-    public function getGeneratedAt(): string
+    public function getGeneratedAt(): int
     {
         return $this->generatedAt;
     }
 
-    public function setGeneratedAt(string $generatedAt): self
+    public function setGeneratedAt(int $generatedAt): self
     {
         $this->generatedAt = $generatedAt;
         return $this;

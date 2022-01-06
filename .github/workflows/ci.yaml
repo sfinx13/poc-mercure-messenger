@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    # https://hub.docker.com/_/ubuntu/
+    runs-on: ubuntu-latest
+    steps:
+     # https://github.com/actions/checkout (official)
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        uses: php-actions/composer@v6
+        with:
+          php_version: 8.0
+
+      # Tests
+      - name: PHPUnit
+        uses: chindit/actions-phpunit-symfony@master
