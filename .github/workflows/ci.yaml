@@ -15,11 +15,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install dependencies
-        uses: php-actions/composer@v6
+      # https://github.com/shivammathur/setup-php (community)
+      - name: Setup PHP, extensions and composer with shivammathur/setup-php
+        uses: shivammathur/setup-php@verbose
         with:
-          php_version: 8.0
+          php-version: 8.0
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, json, bcmath, zip
 
-      # Tests
-      - name: PHPUnit
-        uses: chindit/actions-phpunit-symfony@master
+      # Composer
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+        # https://help.github.com/en/actions/configuring-and-managing-workflows/caching-dependencies-to-speed-up-workflows
+      - name: Cache composer dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+
+      # https://github.com/sensiolabs/security-checker
+      - name: Security check installed dependencies
+        uses: symfonycorp/security-checker-action@v2
