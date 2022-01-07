@@ -14,7 +14,7 @@ trait TimestampableTrait
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
-    private ?\DateTimeInterface $updatedAt;
+    private ?\DateTimeImmutable $updatedAt;
 
     public function getCreatedAt(): \DateTimeImmutable
     {
