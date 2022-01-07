@@ -10,7 +10,9 @@ use Symfony\Component\Security\Http\Event\LogoutEvent;
 
 class LogoutSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private NotificationManager $notificationManager, private Notifier $notifier) {}
+    public function __construct(private NotificationManager $notificationManager, private Notifier $notifier)
+    {
+    }
 
     public static function getSubscribedEvents(): array
     {

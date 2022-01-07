@@ -19,13 +19,14 @@ class ExportMessageHandler implements MessageHandlerInterface
 {
     public function __construct(
         private UrlGeneratorInterface $router,
-        private Notifier             $notifier,
-        private Counter               $counter,
-        private FileGenerator         $fileGenerator,
-        private FileManager           $fileManager,
-        private NotificationManager   $notificationManager,
-        private NotificationRepository   $notificationRepository
-    ) {}
+        private Notifier $notifier,
+        private Counter $counter,
+        private FileGenerator $fileGenerator,
+        private FileManager $fileManager,
+        private NotificationManager $notificationManager,
+        private NotificationRepository $notificationRepository
+    ) {
+    }
 
     public function __invoke(ExportMessage $exportMessage)
     {

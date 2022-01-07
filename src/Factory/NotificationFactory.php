@@ -10,7 +10,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class NotificationFactory
 {
-    public function __construct(private NotificationTypeRepository $notificationTypeRepository) {}
+    public function __construct(private NotificationTypeRepository $notificationTypeRepository)
+    {
+    }
 
     public function createInstanceFrom(MessageInterface $message): Notification
     {

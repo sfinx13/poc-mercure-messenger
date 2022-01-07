@@ -42,7 +42,7 @@ class ExportController extends AbstractController
         $this->counter->current($username);
         $args = $request->query->all();
         $startDate = new \DateTime($args['start-date']);
-        $filename = 'export_' . $username. '_' . $startDate->getTimestamp() . '.csv';
+        $filename = 'export_' . $username . '_' . $startDate->getTimestamp() . '.csv';
 
         $exportMessage = (new ExportMessage())
             ->setUsername($username)

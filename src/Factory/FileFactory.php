@@ -9,7 +9,9 @@ use Symfony\Component\Security\Core\Security;
 
 class FileFactory
 {
-    public function __construct(private ParameterBagInterface $parameterBag, private Security $security) {}
+    public function __construct(private ParameterBagInterface $parameterBag, private Security $security)
+    {
+    }
 
     public function createInstanceFrom(ExportMessage $exportMessage): File
     {

@@ -29,7 +29,8 @@ class LoginFormAuthentificatorAuthenticator extends AbstractLoginFormAuthenticat
         private UrlGeneratorInterface $urlGenerator,
         private NotificationManager $notificationManager,
         private Notifier $notifier
-    ) {}
+    ) {
+    }
 
     public function authenticate(Request $request): PassportInterface
     {

@@ -17,7 +17,9 @@ class JwtProvider implements TokenProviderInterface
         "http://demo.com/message"
     ];
 
-    public function __construct(private ParameterBagInterface $parameterBag) {}
+    public function __construct(private ParameterBagInterface $parameterBag)
+    {
+    }
 
     public function getJwt(): string
     {

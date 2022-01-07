@@ -23,9 +23,10 @@ class FileGenerator
 
     public function __construct(
         private ParameterBagInterface $parameterBag,
-        private Notifier              $notifier,
-        private LoggerInterface       $logger
-    ) {}
+        private Notifier $notifier,
+        private LoggerInterface $logger
+    ) {
+    }
 
     public function initFrom(ExportMessage $exportMessage): self
     {

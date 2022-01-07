@@ -23,7 +23,7 @@ class DeleteMessage implements MessageInterface
 
     public function getFilename(): ?string
     {
-        return $this->filename?? null;
+        return $this->filename ?? null;
     }
 
     public function setFilename(?string $filename): self

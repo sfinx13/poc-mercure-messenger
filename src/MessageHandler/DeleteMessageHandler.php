@@ -19,7 +19,8 @@ class DeleteMessageHandler implements MessageHandlerInterface
         private NotificationManager $notificationManager,
         private Notifier $notifier,
         private Security $security
-    ) {}
+    ) {
+    }
 
     public function __invoke(DeleteMessage $deleteMessage)
     {
@@ -28,7 +29,7 @@ class DeleteMessageHandler implements MessageHandlerInterface
 
         $this->notifier->send(
             new Notification(
-                ['files/'.$deleteMessage->getUsername()],
+                ['files/' . $deleteMessage->getUsername()],
                 ['message' => 'All files has been deleted'],
                 true,
                 'files-deleted'
@@ -38,7 +39,7 @@ class DeleteMessageHandler implements MessageHandlerInterface
         $username = $deleteMessage->getUsername();
         $this->notifier->send(
             new Notification(
-                ['files/'.$username],
+                ['files/' . $username],
                 ['counter' => $this->counter->reset($username)],
                 true,
                 'files-deleted'

@@ -10,11 +10,13 @@ use Symfony\Component\Yaml\Yaml;
 
 class UserFixtures extends Fixture
 {
-    public function __construct(private UserPasswordHasherInterface $passwordHasher) {}
+    public function __construct(private UserPasswordHasherInterface $passwordHasher)
+    {
+    }
 
     public function load(ObjectManager $manager): void
     {
-        $dummyData = Yaml::parseFile(__DIR__.'/Data/user.yaml');
+        $dummyData = Yaml::parseFile(__DIR__ . '/Data/user.yaml');
 
         foreach ($dummyData['users'] as $dummyUser) {
             $user = new User();

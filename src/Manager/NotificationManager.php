@@ -12,7 +12,7 @@ class NotificationManager extends AbstractManager
 {
     public function __construct(
         EntityManagerInterface $entityManager,
-        private NotificationFactory    $notificationFactory
+        private NotificationFactory $notificationFactory
     ) {
         parent::__construct($entityManager);
     }

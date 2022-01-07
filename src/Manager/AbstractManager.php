@@ -6,7 +6,9 @@ use Doctrine\ORM\EntityManagerInterface;
 
 abstract class AbstractManager implements ManagerInterface
 {
-    public function __construct(protected EntityManagerInterface $entityManager) {}
+    public function __construct(protected EntityManagerInterface $entityManager)
+    {
+    }
 
     public function save($entity, bool $flush = true): void
     {
