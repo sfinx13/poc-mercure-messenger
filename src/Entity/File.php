@@ -146,7 +146,6 @@ class File
     }
 
     public function getStatus(): ?int
-
     {
         return $this->status;
     }

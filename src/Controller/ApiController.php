@@ -51,7 +51,6 @@ class ApiController extends AbstractController
     private function process(EntityNotification $notification, array $data = []): EntityNotification
     {
         if (!isset($data['action'])) {
-
             return $notification;
         }
 
