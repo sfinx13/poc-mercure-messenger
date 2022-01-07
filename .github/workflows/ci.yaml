@@ -46,6 +46,7 @@ jobs:
       - name: Check PSR12 code style (PHP_CodeSniffer)
         uses: chekalsky/phpcs-action@v1.2.0
         with:
+          php-version: 8.0
           enable_warnings: true
           installed_paths: '${{ github.workspace }}/vendor/squizlabs/php_codesniffer'
           phpcs_bin_path: './vendor/bin/phpcs src --ignore="Migrations/"'
