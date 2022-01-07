@@ -41,3 +41,25 @@ jobs:
       # https://github.com/sensiolabs/security-checker
       - name: Security check installed dependencies
         uses: symfonycorp/security-checker-action@v2
+
+      # https://github.com/chekalsky/phpcs-action (community)
+      - name: Check PSR12 code style (PHP_CodeSniffer)
+        uses: chekalsky/phpcs-action@v1.2.0
+        with:
+          enable_warnings: true
+          installed_paths: '${{ github.workspace }}/vendor/squizlabs/php_codesniffer'
+          phpcs_bin_path: './vendor/bin/phpcs src --ignore="Migrations/"'
+
+      # https://github.com/phpstan/phpstan
+      - name: Analyse PHP Code (PHPStan)
+        run: vendor/bin/phpstan analyse src
+
+      # Symfony
+      - name: Check the Symfony console
+        run: |
+          php bin/console -V
+          php bin/console about
+      # Tests
+      - name: Run unit and functional tests
+        run: |
+          php bin/phpunit --stop-on-failure
