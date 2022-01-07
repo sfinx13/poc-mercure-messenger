@@ -1,3 +1,5 @@
+![example workflow](https://github.com/sfinx13/poc-mercure-messenger/actions/workflows/ci.yaml/badge.svg)
+
 # Demo Mercure
 
 Extract large data in asynchronous way using Messenger and Mercure for live notification
