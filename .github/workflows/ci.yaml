@@ -43,7 +43,7 @@ jobs:
         uses: symfonycorp/security-checker-action@v2
 
       - name: Check PSR12 code style (PHP_CodeSniffer)
-        run: vendor/bin/phpcs analyse src
+        run: vendor/bin/phpcs src
 
       # https://github.com/phpstan/phpstan
       - name: Analyse PHP Code (PHPStan)
