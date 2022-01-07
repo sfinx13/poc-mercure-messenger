@@ -49,9 +49,9 @@ class File
     private ?string $size;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="integer")
      */
-    private string $status;
+    private int $status;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
@@ -145,12 +145,13 @@ class File
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?int
+
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): self
+    public function setStatus(int $status): self
     {
         $this->status = $status;
 

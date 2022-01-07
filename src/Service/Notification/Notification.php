@@ -14,7 +14,7 @@ class Notification
 
     private ?string $eventType;
 
-    public function __construct(array $topics, array $data, $private = true, string $eventType = null)
+    public function __construct(array $topics, array $data, bool $private = true, string $eventType = null)
     {
         $this->topics = $topics;
         $data['created_at'] = (new \DateTime())->format('H:i:s');

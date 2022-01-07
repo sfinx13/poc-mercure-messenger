@@ -98,9 +98,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->roles = $roles;
     }
 
-    public function getSalt(): void
+    public function getSalt(): ?string
     {
-        return;
+        return null;
     }
 
     public function eraseCredentials(): void

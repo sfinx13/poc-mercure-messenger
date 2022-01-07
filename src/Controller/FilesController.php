@@ -31,7 +31,7 @@ class FilesController extends AbstractController
         ];
 
         $response = $this->render('home/index.html.twig', [
-            'files' => $files ?? [],
+            'files' => $files,
             'topics' => $topics
         ]);
 

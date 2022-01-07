@@ -23,8 +23,7 @@ class FileGenerator
 
     public function __construct(
         private ParameterBagInterface $parameterBag,
-        private Notifier $notifier,
-        private LoggerInterface $logger
+        private Notifier $notifier
     ) {
     }
 
@@ -43,7 +42,6 @@ class FileGenerator
     public function generate(): FileInfo
     {
         $filesystem = new Filesystem();
-        $this->logger->info($this->destinationFolder);
 
         if (!$filesystem->exists($this->destinationFolder)) {
             $filesystem->mkdir($this->destinationFolder);
@@ -52,7 +50,7 @@ class FileGenerator
         $filesystem->touch($this->filepath);
         $stopDate = (new \DateTime())->add($this->interval);
         $startDate = new \DateTime();
-        $this->logger->info($this->interval->s);
+
         while (new \DateTime() < $stopDate) {
             $now = \DateTime::createFromFormat('U.u', microtime(true));
             if ($now !== false) {

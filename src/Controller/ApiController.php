@@ -48,9 +48,10 @@ class ApiController extends AbstractController
         return $this->json($data, Response::HTTP_OK);
     }
 
-    private function process(EntityNotification $notification, $data): EntityNotification
+    private function process(EntityNotification $notification, array $data = []): EntityNotification
     {
         if (!isset($data['action'])) {
+
             return $notification;
         }
 
