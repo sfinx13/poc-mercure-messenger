@@ -4,11 +4,21 @@ namespace App\Model;
 
 class FileInfo
 {
+    private string $filepath = '';
     private string $filename = '';
-
     private string $filesize = '';
-
     private int $generatedAt = 0;
+
+    public function getFilepath(): string
+    {
+        return $this->filepath;
+    }
+
+    public function setFilepath(string $filepath): FileInfo
+    {
+        $this->filepath = $filepath;
+        return $this;
+    }
 
     public function getFilename(): string
     {

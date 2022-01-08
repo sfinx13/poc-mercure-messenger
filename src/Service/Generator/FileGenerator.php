@@ -4,15 +4,14 @@ namespace App\Service\Generator;
 
 use App\Message\ExportMessage;
 use App\Model\FileInfo;
+use App\Utils\RandomFloatProviderInterface;
 use App\Service\Notification\Notifier;
 use App\Service\Notification\Notification;
-use App\Utils\MathHelper;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 
-class FileGenerator
+class FileGenerator implements FileGeneratorInterface
 {
     private string $filename;
     private string $filepath;
@@ -22,6 +21,7 @@ class FileGenerator
     private string $destinationFolder;
 
     public function __construct(
+        private RandomFloatProviderInterface $randomFloatProvider,
         private ParameterBagInterface $parameterBag,
         private Notifier $notifier
     ) {
@@ -54,7 +54,7 @@ class FileGenerator
         while (new \DateTime() < $stopDate) {
             $now = \DateTime::createFromFormat('U.u', microtime(true));
             if ($now !== false) {
-                $line = $now->format("Y-m-d H:i:s.u") . ';' . MathHelper::randomFloat(0, 1);
+                $line = $now->format("Y-m-d H:i:s.u") . ';' . $this->randomFloatProvider->random(0, 1);
                 $filesystem->appendToFile($this->filepath, $line . PHP_EOL);
 
                 $this->notifier->send(new Notification(
@@ -70,6 +70,7 @@ class FileGenerator
 
         return (new FileInfo())
             ->setFilename($this->getFilename())
+            ->setFilepath($this->filepath)
             ->setFilesize(round($file->getSize() / 1024) . ' Ko')
             ->setGeneratedAt(time());
     }
