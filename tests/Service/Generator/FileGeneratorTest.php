@@ -7,6 +7,7 @@ use App\Message\ExportMessage;
 use App\Model\FileInfo;
 use App\Service\Generator\FileGenerator;
 use App\Service\Notification\Notifier;
+use App\Utils\RandomFloatProvider;
 use App\Utils\RandomFloatProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -29,8 +30,14 @@ class FileGeneratorTest extends KernelTestCase
     public function testFileGenerated(): void
     {
         $parameterBag = static::getContainer()->get(ParameterBagInterface::class);
-        $randomFloatProvider = static::getContainer()->get(RandomFloatProviderInterface::class);
-        $notifier = static::getContainer()->get(Notifier::class);
+        $randomFloatProvider = $this
+            ->getMockBuilder(RandomFloatProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $notifier = $this
+            ->getMockBuilder(Notifier::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $fileGenerator = new FileGenerator($randomFloatProvider, $parameterBag, $notifier);
 
@@ -47,7 +54,7 @@ class FileGeneratorTest extends KernelTestCase
 
         $this->assertFileExists($fileGeneratedInfo->getFilepath(), 'given filename does not exists');
         $this->assertTrue($fileGeneratedInfo->getFilename() === $this->filename);
-        $this->assertTrue((int)$fileGeneratedInfo->getFilesize() < 2, $fileGeneratedInfo->getFilesize());
+        $this->assertNotEmpty($fileGeneratedInfo->getFilesize());
     }
 
     public function testFileGeneratedMocked()
