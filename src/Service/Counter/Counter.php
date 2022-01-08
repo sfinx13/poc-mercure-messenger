@@ -6,9 +6,10 @@ use Psr\Cache\CacheItemPoolInterface;
 
 class Counter
 {
-    public function __construct(private CacheItemPoolInterface $cache,
-                                private CountableMessageInterface $countableMessage)
-    {
+    public function __construct(
+        private CacheItemPoolInterface $cache,
+        private CountableMessageInterface $countableMessage
+    ) {
     }
 
     public function current($key): void
