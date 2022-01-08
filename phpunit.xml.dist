@@ -20,6 +20,7 @@
         <server name="DESTINATION_FOLDER" value="/public/csv/" />
         <server name="TOPIC_URL" value="http://demo.com/" />
         <server name="MERCURE_JWT_SECRET" value="!ChangeMe!" />
+        <server name="DATABASE_URL" value="" />
     </php>
 
     <testsuites>
