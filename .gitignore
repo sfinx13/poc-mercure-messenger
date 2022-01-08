@@ -33,3 +33,4 @@ yarn-error.log
 /.phpcs-cache
 /phpcs.xml
 ###< squizlabs/php_codesniffer ###
+/coverage/

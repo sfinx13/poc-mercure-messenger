@@ -6,7 +6,7 @@ use App\Entity\NotificationType;
 use App\Manager\FileManager;
 use App\Manager\NotificationManager;
 use App\Message\ExportMessage;
-use App\Service\Counter;
+use App\Service\Counter\Counter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

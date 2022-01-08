@@ -7,7 +7,7 @@ use App\Manager\NotificationManager;
 use App\Message\DeleteMessage;
 use App\Service\Notification\Notification;
 use App\Service\Notification\Notifier;
-use App\Service\Counter;
+use App\Service\Counter\Counter;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Security\Core\Security;
 

@@ -1,25 +1,19 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Counter;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
 
 class Counter
 {
-    public function __construct(private CacheItemPoolInterface $cache, private EntityManagerInterface $entityManager)
+    public function __construct(private CacheItemPoolInterface $cache,
+                                private CountableMessageInterface $countableMessage)
     {
     }
 
     public function current($key): void
     {
-        $connection = $this->entityManager->getConnection();
-        $request = "SELECT count(*) as nb_message FROM messenger_messages where delivered_at is null;";
-        $statement = $connection->prepare($request);
-        $result = $statement->executeQuery();
-        $data = $result->fetchAssociative();
-        $nbMessage = (int)$data['nb_message'];
-
+        $nbMessage = $this->countableMessage->count();
         if (0 === $nbMessage) {
             $this->cache->clear();
         }

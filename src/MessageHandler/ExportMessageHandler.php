@@ -10,8 +10,8 @@ use App\Message\ExportMessage;
 use App\Model\FileInfo;
 use App\Service\Notification\Notification;
 use App\Service\Notification\Notifier;
+use App\Service\Counter\Counter;
 use App\Repository\NotificationRepository;
-use App\Service\Counter;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
