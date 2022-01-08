@@ -3,11 +3,11 @@
 namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Psr\Cache\CacheItemPoolInterface;
 
 class Counter
 {
-    public function __construct(private AdapterInterface $cache, private EntityManagerInterface $entityManager)
+    public function __construct(private CacheItemPoolInterface $cache, private EntityManagerInterface $entityManager)
     {
     }
 
