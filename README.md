@@ -29,3 +29,6 @@ make build
 
 * Debugging tool: http://localhost:9000/.well-known/mercure/ui/
 * Upload postman collection [postman/](postman/)
+
+
+## Test
