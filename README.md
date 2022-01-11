@@ -6,6 +6,8 @@ Extract large data in asynchronous way using Messenger and Mercure for live noti
 
 ![Screenshoot](doc/demo_mercure_messenger.gif)
 
+![Screenshoot](doc/demo_mercure.png)
+
 ## Installation
 
 ```bash
@@ -29,3 +31,11 @@ make build
 
 * Debugging tool: http://localhost:9000/.well-known/mercure/ui/
 * Upload postman collection [postman/](postman/)
+
+## Links
+* [Pushing Data to Clients Using the Mercure Protocol](https://symfony.com/doc/current/mercure.html)
+* [Messenger: Sync & Queued Message Handling](https://symfony.com/doc/current/messenger.html)
+* [Getting started with mercure](https://mercure.rocks/docs/getting-started)
+* [Mercure documentation](https://mercure.rocks/docs)
+* [Awesome Mercure Resources](https://mercure.rocks/docs/ecosystem/awesome)
+* [Using server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events)
