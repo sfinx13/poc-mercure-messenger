@@ -1,8 +1,9 @@
 ![example workflow](https://github.com/sfinx13/poc-mercure-messenger/actions/workflows/ci.yaml/badge.svg)
 
-# Demo Mercure
+# Asynchronous export with real-time notifications
+> Demo made with mercure and messenger symfony components
 
-Extract large data in asynchronous way using Messenger and Mercure for live notification
+Extract csv data in asynchronous way using messenger and and get real-time notifications about what happened using mercure components
 
 
 Export CSV             |  Notification center

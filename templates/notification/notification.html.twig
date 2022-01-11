@@ -18,7 +18,7 @@
 
 {% block body %}
     <header>
-        <h1>Centre de notification <span id="count-notifications" class="badge badge-danger">{{ count_notifications }}</span></h1>
+        <h1>Notification center <span id="count-notifications" class="badge badge-danger">{{ count_notifications }}</span></h1>
     </header>
 
     <section data-topics="{{ topics|json_encode }}" class="mt-200">
@@ -36,11 +36,11 @@
                                data-action="is_processed"
                                href="{{ path('download_file', {'filename': notification.link }) }}"
                                class="btn btn-primary active"
-                               role="button">Télécharger</a>
+                               role="button">Download</a>
                             <a data-id="{{ notification.id }}"
                                data-action="is_processed"
                                class="btn btn-secondary active"
-                               role="button">Annuler</a>
+                               role="button">Cancel</a>
                         </div>
                     {% endif %}
                 </div>

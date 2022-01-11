@@ -2,24 +2,24 @@ notification-types:
   -
     type: notification
     name: Login
-    template: "[USER] vient de s'authentifier."
+    template: "[USER] has been just authenticated"
   -
     type: activity
     name: Export file end
-    template: "L'export [FILENAME] de [USER] est terminé."
+    template: "Export [FILENAME] from [USER] is finished."
   -
     type: notification
     name: Export file start
-    template: "[USER] a demarré un export de donnée"
+    template: "[USER] has been started a new export"
   -
     type: notification
     name: Export file in progress
-    template: "Un export de [USER] est en cours"
+    template: "Expory from [USER] is in progress"
   -
     type: notification
     name: Delete file
-    template: "[USER] a supprimé ses fichiers"
+    template: "[USER] has been deleted his files"
   -
     type: notification
     name: Logout
-    template: "[USER] s'est déconnecté."
+    template: "[USER] has been logout"
