@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Message;
-
-use Symfony\Component\Security\Core\User\UserInterface;
+namespace App\Messenger\Message;
 
 interface MessageInterface
 {

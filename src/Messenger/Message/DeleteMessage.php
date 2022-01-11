@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Message;
+namespace App\Messenger\Message;
 
 class DeleteMessage implements MessageInterface
 {
     private string $username;
-
     private ?string $filename;
-
     private ?string $template;
 
     public function getUsername(): string

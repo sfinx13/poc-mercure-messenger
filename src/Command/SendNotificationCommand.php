@@ -3,7 +3,7 @@
 namespace App\Command;
 
 use App\Service\Notification\Notification;
-use App\Service\Notification\Notifier;
+use App\Service\Notification\NotifierInterface;
 use Faker\Factory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,7 +17,7 @@ class SendNotificationCommand extends Command
     protected static $defaultDescription = 'Publish a notification';
 
     public function __construct(
-        private Notifier $notifier,
+        private NotifierInterface $notifier,
         string $name = null
     ) {
         parent::__construct($name);

@@ -4,7 +4,7 @@ namespace App\Factory;
 
 use App\Entity\Notification;
 use App\Entity\NotificationType;
-use App\Message\MessageInterface;
+use App\Messenger\Message\MessageInterface;
 use App\Repository\NotificationTypeRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 

@@ -3,7 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\File;
-use App\Message\ExportMessage;
+use App\Messenger\Message\ExportMessage;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Security\Core\Security;
 

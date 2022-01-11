@@ -1,13 +1,14 @@
 <?php
 
-namespace App\MessageHandler;
+namespace App\Messenger\MessageHandler;
 
 use App\Manager\FileManager;
 use App\Manager\NotificationManager;
-use App\Message\DeleteMessage;
+use App\Messenger\Message\DeleteMessage;
 use App\Service\Notification\Notification;
 use App\Service\Notification\Notifier;
 use App\Service\Counter\Counter;
+use App\Service\Notification\NotifierInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Security\Core\Security;
 
@@ -17,7 +18,7 @@ class DeleteMessageHandler implements MessageHandlerInterface
         private Counter $counter,
         private FileManager $fileManager,
         private NotificationManager $notificationManager,
-        private Notifier $notifier,
+        private NotifierInterface $notifier,
         private Security $security
     ) {
     }

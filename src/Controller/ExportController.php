@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\NotificationType;
 use App\Manager\FileManager;
 use App\Manager\NotificationManager;
-use App\Message\ExportMessage;
+use App\Messenger\Message\ExportMessage;
 use App\Service\Counter\Counter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,21 +17,12 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('app')]
 class ExportController extends AbstractController
 {
-    private MessageBusInterface $messageBus;
-    private FileManager $fileManager;
-    private NotificationManager $notificationManager;
-    private Counter $counter;
-
     public function __construct(
-        MessageBusInterface $messageBus,
-        FileManager $fileManager,
-        NotificationManager $notificationManager,
-        Counter $counter
+        private MessageBusInterface $messageBus,
+        private FileManager $fileManager,
+        private NotificationManager $notificationManager,
+        private Counter $counter
     ) {
-        $this->messageBus = $messageBus;
-        $this->fileManager = $fileManager;
-        $this->notificationManager = $notificationManager;
-        $this->counter = $counter;
     }
 
     #[Route('/export', name:'export_file')]

@@ -11,4 +11,4 @@ framework:
             # sync: 'sync://'
         routing:
             # Route your messages to the transports
-            'App\Message\ExportMessage': async
+            'App\Messenger\Message\ExportMessage': async

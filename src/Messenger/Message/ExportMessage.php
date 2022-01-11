@@ -1,21 +1,14 @@
 <?php
 
-namespace App\Message;
-
-use Symfony\Component\Security\Core\User\UserInterface;
+namespace App\Messenger\Message;
 
 class ExportMessage implements MessageInterface
 {
     private string $username;
-
     private string $filename;
-
     private string $template;
-
     private int $interval;
-
     private \DateTime $startDate;
-
     private array $data;
 
     public function getUsername(): string

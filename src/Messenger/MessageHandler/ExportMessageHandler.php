@@ -1,17 +1,17 @@
 <?php
 
-namespace App\MessageHandler;
+namespace App\Messenger\MessageHandler;
 
 use App\Entity\NotificationType;
-use App\Service\Generator\FileGenerator;
+use App\Model\FileInfo;
+use App\Messenger\Message\ExportMessage;
+use App\Repository\NotificationRepository;
 use App\Manager\FileManager;
 use App\Manager\NotificationManager;
-use App\Message\ExportMessage;
-use App\Model\FileInfo;
+use App\Service\Generator\FileGenerator;
 use App\Service\Notification\Notification;
-use App\Service\Notification\Notifier;
+use App\Service\Notification\NotifierInterface;
 use App\Service\Counter\Counter;
-use App\Repository\NotificationRepository;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -19,7 +19,7 @@ class ExportMessageHandler implements MessageHandlerInterface
 {
     public function __construct(
         private UrlGeneratorInterface $router,
-        private Notifier $notifier,
+        private NotifierInterface $notifier,
         private Counter $counter,
         private FileGenerator $fileGenerator,
         private FileManager $fileManager,

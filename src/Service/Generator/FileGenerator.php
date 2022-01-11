@@ -2,8 +2,9 @@
 
 namespace App\Service\Generator;
 
-use App\Message\ExportMessage;
+use App\Messenger\Message\ExportMessage;
 use App\Model\FileInfo;
+use App\Service\Notification\NotifierInterface;
 use App\Utils\RandomFloatProviderInterface;
 use App\Service\Notification\Notifier;
 use App\Service\Notification\Notification;
@@ -23,7 +24,7 @@ class FileGenerator implements FileGeneratorInterface
     public function __construct(
         private RandomFloatProviderInterface $randomFloatProvider,
         private ParameterBagInterface $parameterBag,
-        private Notifier $notifier
+        private NotifierInterface $notifier
     ) {
     }
 

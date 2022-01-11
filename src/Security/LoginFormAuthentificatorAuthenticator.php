@@ -5,6 +5,7 @@ namespace App\Security;
 use App\Manager\NotificationManager;
 use App\Service\Notification\Notification;
 use App\Service\Notification\Notifier;
+use App\Service\Notification\NotifierInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,7 +29,7 @@ class LoginFormAuthentificatorAuthenticator extends AbstractLoginFormAuthenticat
     public function __construct(
         private UrlGeneratorInterface $urlGenerator,
         private NotificationManager $notificationManager,
-        private Notifier $notifier
+        private NotifierInterface $notifier
     ) {
     }
 

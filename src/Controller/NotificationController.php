@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Manager\NotificationManager;
 use App\Repository\NotificationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

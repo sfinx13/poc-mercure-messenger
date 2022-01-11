@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\NotificationType;
-use App\Message\DeleteMessage;
+use App\Messenger\Message\DeleteMessage;
 use App\Repository\FileRepository;
 use App\Security\CookieGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

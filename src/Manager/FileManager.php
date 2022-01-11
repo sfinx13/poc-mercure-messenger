@@ -5,7 +5,7 @@ namespace App\Manager;
 use App\Entity\File;
 use App\Entity\User;
 use App\Factory\FileFactory;
-use App\Message\ExportMessage;
+use App\Messenger\Message\ExportMessage;
 use App\Model\FileInfo;
 use App\Repository\FileRepository;
 use Doctrine\ORM\EntityManagerInterface;

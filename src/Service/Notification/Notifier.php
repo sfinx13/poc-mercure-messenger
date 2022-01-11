@@ -7,7 +7,7 @@ use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
 use Symfony\Component\Uid\Uuid;
 
-class Notifier
+class Notifier implements NotifierInterface
 {
     public function __construct(private HubInterface $hub, private ParameterBagInterface $parameterBag)
     {

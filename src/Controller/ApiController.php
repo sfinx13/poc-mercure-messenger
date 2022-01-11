@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Notification as EntityNotification;
 use App\Manager\NotificationManager;
 use App\Service\Notification\Notification;
-use App\Service\Notification\Notifier;
+use App\Service\Notification\NotifierInterface;
 use App\Repository\NotificationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,7 +26,7 @@ class ApiController extends AbstractController
     #[Route('/notification/{id}/action', name:'read_notification', methods: 'PATCH')]
     public function read(
         NotificationManager $notificationManager,
-        Notifier $notifier,
+        NotifierInterface $notifier,
         Request $request,
         int $id
     ): JsonResponse {

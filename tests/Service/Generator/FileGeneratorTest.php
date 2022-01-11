@@ -3,12 +3,11 @@
 namespace App\Tests\Service\Generator;
 
 use App\Entity\NotificationType;
-use App\Message\ExportMessage;
+use App\Messenger\Message\ExportMessage;
 use App\Model\FileInfo;
 use App\Service\Generator\FileGenerator;
 use App\Service\Notification\Notifier;
 use App\Utils\RandomFloatProvider;
-use App\Utils\RandomFloatProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
@@ -61,9 +60,6 @@ class FileGeneratorTest extends KernelTestCase
     {
         $fileGenerator = $this->getMockBuilder(FileGenerator::class)
             ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
             ->getMock();
 
         $fileInfo = (new FileInfo())
