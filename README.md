@@ -33,9 +33,9 @@ make build
 * Upload postman collection [postman/](postman/)
 
 ## Links
-* [Pushing Data to Clients Using the Mercure Protocol](https://symfony.com/doc/current/mercure.html)
-* [Messenger: Sync & Queued Message Handling](https://symfony.com/doc/current/messenger.html)
-* [Getting started with mercure](https://mercure.rocks/docs/getting-started)
-* [Mercure documentation](https://mercure.rocks/docs)
-* [Awesome Mercure Resources](https://mercure.rocks/docs/ecosystem/awesome)
-* [Using server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events)
+* <a href="https://symfony.com/doc/current/mercure.html" target="_blank">Pushing Data to Clients Using the Mercure Protocol</a>
+* <a href="https://symfony.com/doc/current/messenger.html" target="_blank">Messenger: Sync & Queued Message Handling</a>
+* <a href="https://mercure.rocks/docs/getting-started" target="_blank">Getting started with mercure]</a>
+* <a href="https://mercure.rocks/docs" target="_blank">Mercure documentation</a>
+* <a href="https://mercure.rocks/docs/ecosystem/awesome" target="_blank">Awesome Mercure Resources</a>
+* <a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events" target="_blank">Using server-sent events</a>
