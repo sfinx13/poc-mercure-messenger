@@ -4,9 +4,8 @@
 
 Extract large data in asynchronous way using Messenger and Mercure for live notification
 
-![Screenshoot](doc/demo_mercure_messenger.gif)
-
-![Screenshoot](doc/demo_mercure.png)
+<img style="width:50%" src="doc/demo_mercure_messenger.gif" alt="Demo mercure messenger">
+<img style="width:50%" src="doc/demo_mercure.png" alt="Demo mercure">
 
 ## Installation
 
