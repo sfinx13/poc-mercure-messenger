@@ -43,8 +43,8 @@ reload-data: ## : Reload fixtures database
 drop-db: ## : Drop database
 	@docker-compose exec php-fpm sh -c "bin/console --env=dev doctrine:database:drop --force --no-interaction"
 
-sleep: ## : Sleep 15 seconds
-	@bash -l -c 'sleep 15'
+sleep: ## : Sleep  90 seconds
+	@bash -l -c 'sleep 90'
 
 setup: ## : Setup build
 	@docker-compose build
