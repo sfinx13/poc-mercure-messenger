@@ -23,6 +23,9 @@ php-fpm: ## : Connect php-fpm container
 php-worker: ## : Connect php-worker container
 	@bash -l -c 'docker-compose exec php-worker bash'
 
+test: ## : Execute phpunit tests
+	@bash -l -c 'docker-compose exec php-fpm bash -c "bin/phpunit"'
+
 mysql: ## : Connect mysql container
 	@docker-compose exec mysql_db sh -c "mysql -u poc -ppoc mercure_poc"
 

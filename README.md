@@ -35,6 +35,12 @@ make build
 * Debugging tool: http://localhost:9000/.well-known/mercure/ui/
 * Upload postman collection [postman/](postman/)
 
+## Test
+
+```bash
+make test
+```
+
 ## Links
 * [Pushing Data to Clients Using the Mercure Protocol](https://symfony.com/doc/current/mercure.html)
 * [Messenger: Sync & Queued Message Handling](https://symfony.com/doc/current/messenger.html)
