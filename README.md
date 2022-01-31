@@ -18,28 +18,47 @@ cp .env.dist .env
 make build
 ```
 
-## Usage
+## Environment
 
-* Login page: http://localhost:8080
-    * Login: `demo-1`, Password: `demo-1`
-    * Login: `demo-2`, Password: `demo-2`
-    * Login: `admin`, Password: `admin`
-* Notification page: http://localhost:8080/app/notifications
-* Command: Send a notification with random message with option if you want to push more messages
-    ```bash
-    docker exec -it poc-php-fpm bin/console app:send-notif -i 50
-    ```
+Login: [localhost:8080](http://localhost:8080)
 
-## Debugging
+Notification: [http://localhost:8080/app/notifications](http://localhost:8080/app/notifications)
 
-* Debugging tool: http://localhost:9000/.well-known/mercure/ui/
-* Upload postman collection [postman/](postman/)
+### Credentials
+  * Login: `demo-1`, Password: `demo-1`
+  * Login: `demo-2`, Password: `demo-2`
+  * Login: `admin`, Password: `admin`
 
-## Test
+### Command
+> Send a notification with random message with option if you want to push more messages
 
 ```bash
-make test
+docker exec -it poc-php-fpm bin/console app:send-notif -i 50
 ```
+
+### Debugging
+* Debugging tool: http://localhost:9000/.well-known/mercure/ui/
+* Upload postman collection [postman/](postman/)  
+
+## Usage
+
+|Commands |Description  |
+|---------|-------------|
+|make build| Installation |
+|make run| Start containers |
+|make shutdown| Shutdown containers |
+|make restart| Restart containers |
+|make php-fpm| Connect php-fpm container |
+|make php-worker| Connect php-worker container  |
+|make mysql| Connect mysql container |
+|make mercure| Connect mercure container |
+|make composer| Install composer dependencies |
+|make npm install| Install npm dependencies |
+|make npm build| Build npm dependencies |
+|make rebuild-database| Rebuild database |
+|make test| Execute phpunit tests |
+|make help | Show list of commande available
+
 
 ## Links
 * [Pushing Data to Clients Using the Mercure Protocol](https://symfony.com/doc/current/mercure.html)
