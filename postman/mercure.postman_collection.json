@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "25d84dc5-e97b-4a4a-82e3-5b9aad38507e",
+		"_postman_id": "d204bf8c-32a7-4ab8-abb5-6622f78407e9",
 		"name": "Mercure",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -25,12 +25,12 @@
 					"urlencoded": [
 						{
 							"key": "topic",
-							"value": "http://demo.com/message",
+							"value": "https://example.com/message",
 							"type": "text"
 						},
 						{
 							"key": "data",
-							"value": "{\"message\":\"Bonjour ça va\"}",
+							"value": "{\"message\":\"Hello world Buddy\"}",
 							"type": "text"
 						}
 					]
