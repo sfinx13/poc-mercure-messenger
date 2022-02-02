@@ -16,6 +16,5 @@ class ActivableTraitTest extends TestCase
         $anonymousClass->setActive(true);
 
         $this->assertTrue($anonymousClass->isActive(), true);
-
     }
 }

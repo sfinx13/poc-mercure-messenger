@@ -46,7 +46,7 @@ class ExportMessageHandler implements MessageHandlerInterface
 
         $this->notifier->send(
             new Notification(
-                ['files/' . $username],
+                ['user/' . $username . '/files'],
                 $this->getFileData($fileInfo),
                 true,
                 'file-created'
@@ -55,7 +55,7 @@ class ExportMessageHandler implements MessageHandlerInterface
 
         $this->notifier->send(
             new Notification(
-                ['files/' . $username],
+                ['user/' . $username . '/files'],
                 $this->getCountData($username),
                 true,
                 'counter'

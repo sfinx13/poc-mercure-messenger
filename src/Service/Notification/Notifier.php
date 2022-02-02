@@ -16,7 +16,7 @@ class Notifier implements NotifierInterface
     /**
      * @throws \JsonException
      */
-    public function send(Notification $notification): void
+    public function send(Notification $notification): string
     {
         $topicUrl = $this->parameterBag->get('topic_url');
         $topics = array_map(static function ($topic) use ($topicUrl) {
@@ -31,6 +31,6 @@ class Notifier implements NotifierInterface
             $notification->getEventType()
         );
 
-        $this->hub->publish($update);
+        return $this->hub->publish($update);
     }
 }

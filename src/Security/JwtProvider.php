@@ -12,10 +12,9 @@ use Symfony\Component\Mercure\Jwt\TokenProviderInterface;
 
 class JwtProvider implements TokenProviderInterface
 {
-    private const TOPICS = [
-        "http://demo.com/files/{userid}",
-        "http://demo.com/message"
-    ];
+    private const TOPICS = [ "user/{userid}/files", "message"];
+
+    protected array $topics = [];
 
     public function __construct(private ParameterBagInterface $parameterBag)
     {
@@ -26,9 +25,16 @@ class JwtProvider implements TokenProviderInterface
         $builder = (new Builder(new JoseEncoder(), new MicrosecondBasedDateConversion()))
             ->withHeader('typ', 'JWT')
             ->withHeader('alg', 'HS256')
-            ->withClaim('mercure', ['publish' => self::TOPICS])
+            ->withClaim('mercure', ['publish' => $this->getTopics()])
             ->getToken(new Sha256(), InMemory::plainText($this->parameterBag->get('jwt_secret')));
 
         return $builder->toString();
+    }
+
+    private function getTopics()
+    {
+        return array_map(function (string $topic) {
+            return $this->parameterBag->get('topic_url') . $topic;
+        }, self::TOPICS);
     }
 }

@@ -30,7 +30,7 @@ class DeleteMessageHandler implements MessageHandlerInterface
 
         $this->notifier->send(
             new Notification(
-                ['files/' . $deleteMessage->getUsername()],
+                ['user/' . $deleteMessage->getUsername() . '/files'],
                 ['message' => 'All files has been deleted'],
                 true,
                 'files-deleted'
@@ -40,7 +40,7 @@ class DeleteMessageHandler implements MessageHandlerInterface
         $username = $deleteMessage->getUsername();
         $this->notifier->send(
             new Notification(
-                ['files/' . $username],
+                ['user/' . $username . '/files'],
                 ['counter' => $this->counter->reset($username)],
                 true,
                 'files-deleted'

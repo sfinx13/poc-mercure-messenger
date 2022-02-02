@@ -20,7 +20,6 @@ class FileInfoTest extends TestCase
         $this->assertTrue($fileInfo->getFilesize() === '1 Ko');
         $this->assertTrue($fileInfo->getFilepath() === '/application/public/csv/dummy.csv');
         $this->assertTrue($fileInfo->getGeneratedAt() === $generatedAt);
-
     }
 
     public function testModelIsFalse(): void

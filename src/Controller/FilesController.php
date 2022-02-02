@@ -26,7 +26,7 @@ class FilesController extends AbstractController
         );
 
         $topics = [
-            $this->getParameter('topic_url') . 'files/' . $this->getUser()->getUserIdentifier(),
+            $this->getParameter('topic_url') . 'user/' . $this->getUser()->getUserIdentifier() . '/files',
             $this->getParameter('topic_url') . 'message'
         ];
 

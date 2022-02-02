@@ -21,8 +21,8 @@ class FileGeneratorTest extends KernelTestCase
         $this->path = static::getContainer()->getParameter('kernel.project_dir')
         . static::getContainer()->getParameter('destination_folder');
 
-        if (file_exists($this->path. $this->filename)) {
-            unlink($this->path. $this->filename);
+        if (file_exists($this->path . $this->filename)) {
+            unlink($this->path . $this->filename);
         }
     }
 

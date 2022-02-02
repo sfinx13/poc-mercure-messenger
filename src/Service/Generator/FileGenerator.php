@@ -59,7 +59,7 @@ class FileGenerator implements FileGeneratorInterface
                 $filesystem->appendToFile($this->filepath, $line . PHP_EOL);
 
                 $this->notifier->send(new Notification(
-                    ['files/' . $this->generatedBy],
+                    ['user/' . $this->generatedBy . '/files'],
                     $this->getPercentageData($startDate, $stopDate),
                     true,
                     'progress-bar'
