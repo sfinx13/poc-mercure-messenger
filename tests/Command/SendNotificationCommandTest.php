@@ -15,12 +15,10 @@ class SendNotificationCommandTest extends KernelTestCase
         $command = (new Application(self::$kernel))->find('app:send-notif');
 
         $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            'command' => $command->getName(),
-        ]);
+        $commandTester->execute([]);
+        $this->assertTrue($commandTester->getInput()->getOption('iterations') >= 1);
 
         $output = $commandTester->getDisplay();
-
         $this->assertStringContainsString('Message(s) has/have been published to the hub', $output);
     }
 }
