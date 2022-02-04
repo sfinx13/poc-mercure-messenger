@@ -5,6 +5,7 @@
 
 Extract csv data in asynchronous way using messenger and and get real-time notifications about what happened using mercure components
 
+[Architecture schema](doc/demo_mercure_messenger_schema.png)
 
 Export CSV             |  Notification center
 :-------------------------:|:-------------------------:
