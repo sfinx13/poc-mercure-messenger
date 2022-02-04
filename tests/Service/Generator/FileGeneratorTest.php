@@ -29,22 +29,14 @@ class FileGeneratorTest extends KernelTestCase
     public function testFileGenerated(): void
     {
         $parameterBag = static::getContainer()->get(ParameterBagInterface::class);
-        $randomFloatProvider = $this
-            ->getMockBuilder(RandomFloatProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $notifier = $this
-            ->getMockBuilder(Notifier::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $randomFloatProvider = $this->createMock(RandomFloatProvider::class);
+        $notifier = $this->createMock(Notifier::class);
 
         $fileGenerator = new FileGenerator($randomFloatProvider, $parameterBag, $notifier);
 
-        $startDate = new \DateTime();
-
         $exportMessage = (new ExportMessage())
             ->setUsername('user_test')
-            ->setStartDate($startDate)
+            ->setStartDate(new \DateTime())
             ->setFilename($this->filename)
             ->setTemplate(NotificationType::TEMPLATE_EXPORT_START)
             ->setInterval(1);
@@ -58,9 +50,7 @@ class FileGeneratorTest extends KernelTestCase
 
     public function testFileGeneratedMocked()
     {
-        $fileGenerator = $this->getMockBuilder(FileGenerator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $fileGenerator = $this->createMock(FileGenerator::class);
 
         $fileInfo = (new FileInfo())
             ->setFilepath($this->path)

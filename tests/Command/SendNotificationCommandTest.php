@@ -14,10 +14,7 @@ class SendNotificationCommandTest extends KernelTestCase
     {
         self::bootKernel();
 
-        $notifierMock = $this->getMockBuilder(NotifierInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['send'])
-            ->getMock();
+        $notifierMock = $this->createMock(NotifierInterface::class);
 
         $notifierMock->expects($this->once())
             ->method('send')
