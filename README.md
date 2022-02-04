@@ -5,11 +5,7 @@
 
 Extract csv data in asynchronous way using messenger and and get real-time notifications about what happened using mercure components
 
-[Architecture schema](doc/demo_mercure_messenger_schema.png)
-
-Export CSV             |  Notification center
-:-------------------------:|:-------------------------:
-![Live extraction data](doc/demo_mercure_messenger.gif)  |  ![Notification center](doc/demo_mercure.png)
+![Architecture schema](doc/demo_mercure_messenger_schema.png)
 
 
 ## Installation
@@ -19,7 +15,10 @@ cp .env.dist .env
 make build
 ```
 
-## Environment
+Export CSV             |  Notification center
+:-------------------------:|:-------------------------:
+![Live extraction data](doc/demo_mercure_messenger.gif)  |  ![Notification center](doc/demo_mercure.png)
+
 
 Login: [localhost:8080](http://localhost:8080)
 
