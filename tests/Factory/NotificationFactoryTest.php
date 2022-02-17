@@ -33,14 +33,15 @@ class NotificationFactoryTest extends KernelTestCase
             ->method('findOneBy')
             ->willReturn($notificationType);
 
-        $message = $this->getMessage();
-        $notification = (new NotificationFactory($notificationTypeRepository))->createInstanceFrom($message);
+        $exportMessage = $this->getExportMessage();
+        $notification = (new NotificationFactory($notificationTypeRepository))->createInstanceFrom($exportMessage);
 
         $this->assertInstanceOf(Notification::class, $notification);
-        $this->assertTrue($notification->getUsername() === $message->getUsername());
-        $this->assertStringContainsString($message->getUsername(), $notification->getContent());
+        $this->assertTrue($notification->getUsername() === $exportMessage->getUsername());
+        $this->assertStringContainsString($exportMessage->getUsername(), $notification->getContent());
+        $this->assertTrue($notification->getLink() === $exportMessage->getFilename());
+        $this->assertTrue($notification->getSender() === 'app');
     }
-
 
     public function testCreateInstanceFromReturnEmptyNotification(): void
     {
@@ -51,13 +52,14 @@ class NotificationFactoryTest extends KernelTestCase
             ->method('findOneBy')
             ->willReturn(null);
 
-        $notification = (new NotificationFactory($notificationTypeRepository))->createInstanceFrom($this->getMessage());
+        $notification = (new NotificationFactory($notificationTypeRepository))
+            ->createInstanceFrom($this->getExportMessage());
 
         $this->assertInstanceOf(Notification::class, $notification);
         $this->assertTrue($notification->isActive());
     }
 
-    private function getMessage(): ExportMessage
+    private function getExportMessage(): ExportMessage
     {
         return  (new ExportMessage())
             ->setUsername('john doe')

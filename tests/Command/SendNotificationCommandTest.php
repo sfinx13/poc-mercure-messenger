@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\App\Tests\Command;
+namespace App\Tests\Command;
 
 use App\Service\Notification\Notifier;
 use App\Service\Notification\NotifierInterface;
