@@ -35,3 +35,5 @@ when@test:
     services:
         App\Service\Notification\Notifier:
             public: true
+        App\Manager\NotificationManager:
+            public: true
