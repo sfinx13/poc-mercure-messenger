@@ -57,7 +57,7 @@ docker exec -it poc-php-fpm bin/console app:send-notif -i 50
 |make npm build| Build npm dependencies |
 |make rebuild-database| Rebuild database |
 |make test| Execute phpunit tests |
-|make coverage| Execute phpunit tests |
+|make coverage| Generate phpunit coverage report in html |
 |make help | Show list of commande available
 
 
