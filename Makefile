@@ -26,6 +26,9 @@ php-worker: ## : Connect php-worker container
 test: ## : Execute phpunit tests
 	@bash -l -c 'docker-compose exec php-fpm bash -c "bin/phpunit"'
 
+test-coverage: ## :  Generate phpunit coverage report in html
+	@bash -l -c 'docker-compose exec php-fpm bash -c "XDEBUG_MODE=coverage bin/phpunit --coverage-html coverage"'
+
 mysql: ## : Connect mysql container
 	@docker-compose exec mysql_db sh -c "mysql -u poc -ppoc mercure_poc"
 

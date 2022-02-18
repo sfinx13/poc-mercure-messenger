@@ -2,13 +2,10 @@
 
 namespace App\Tests;
 
-use App\Entity\User;
 use App\Manager\NotificationManager;
 use App\Service\Notification\Notifier;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class SmokeTest extends WebTestCase
 {
@@ -24,7 +21,6 @@ class SmokeTest extends WebTestCase
      */
     public function testPageIsSuccessful($url, $statusCode)
     {
-
         $notifierMock = $this->createMock(Notifier::class);
         $notificationManagerMock = $this->createMock(NotificationManager::class);
 
@@ -33,7 +29,10 @@ class SmokeTest extends WebTestCase
 
         $this->client->request('GET', $url);
 
-        $this->assertTrue($this->client->getResponse()->getStatusCode() === $statusCode);
+        $this->assertTrue(
+            $this->client->getResponse()->getStatusCode() === $statusCode,
+            sprintf('Expected value: %d', $this->client->getResponse()->getStatusCode())
+        );
     }
 
     public function urlProvider()
