@@ -38,7 +38,7 @@ class SmokeTest extends WebTestCase
     public function urlProvider()
     {
         return [
-           // 'Homepage Redirection' => ['/', Response::HTTP_FOUND],
+            'Homepage Redirection' => ['/', Response::HTTP_FOUND],
             'Login page' => ['/login', Response::HTTP_OK]
         ];
     }
