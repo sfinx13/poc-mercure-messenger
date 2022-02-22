@@ -13,11 +13,11 @@ jobs:
     steps:
      # https://github.com/actions/checkout (official)
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.3
 
       # https://github.com/shivammathur/setup-php (community)
       - name: Setup PHP, extensions and composer with shivammathur/setup-php
-        uses: shivammathur/setup-php@verbose
+        uses: shivammathur/setup-php@2.7.0
         with:
           php-version: 8.0
           extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, json, bcmath, zip
