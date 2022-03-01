@@ -20,7 +20,7 @@
         <server name="DESTINATION_FOLDER" value="/public/csv/" />
         <server name="TOPIC_URL" value="https://example.com/" />
         <server name="MERCURE_JWT_SECRET" value="!ChangeMe!" />
-        <server name="DATABASE_URL" value="" />
+        <server name="DATABASE_URL" value="sqlite:///%kernel.project_dir%/var/mercure_poc_test.sqlite" />
     </php>
 
     <testsuites>
