@@ -31,7 +31,7 @@ class SmokeTest extends WebTestCase
 
         $this->assertTrue(
             $this->client->getResponse()->getStatusCode() === $statusCode,
-            sprintf('Result value: %d', $this->client->getResponse()->getStatusCode())
+            sprintf('Result value: %d', $this->client->getResponse()->getContent())
         );
     }
 
