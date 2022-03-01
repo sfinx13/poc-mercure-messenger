@@ -29,8 +29,6 @@ class SmokeTest extends WebTestCase
 
         $this->client->request('GET', $url);
 
-        echo $this->client->getResponse()->getContent();
-
         $this->assertTrue(
             $this->client->getResponse()->getStatusCode() === $statusCode,
             sprintf('Result value: %d', $this->client->getResponse()->getStatusCode())
