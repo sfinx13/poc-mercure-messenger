@@ -57,4 +57,11 @@ jobs:
       # Tests
       - name: Run unit and functional tests
         run: |
-          php bin/phpunit --stop-on-failure
+          XDEBUG_MODE_COVERAGE=coverage php bin/phpunit --stop-on-failure
+
+      - name: Generate test coverage badge
+        uses: ./
+        with:
+          coverage_badge_path: 'badge.svg'
+          push_badge: true
+          repo_token: ${{ secrets.GITHUB_TOKEN }}

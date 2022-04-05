@@ -1,4 +1,6 @@
-![example workflow](https://github.com/sfinx13/poc-mercure-messenger/actions/workflows/ci.yaml/badge.svg)
+![Build status CI workflow](https://github.com/sfinx13/poc-mercure-messenger/actions/workflows/ci.yaml/badge.svg)
+
+![Code Coverage Badge](./badge.svg)
 
 # Asynchronous export with real-time notifications
 > Demo made with mercure and messenger symfony components
@@ -57,7 +59,7 @@ docker exec -it poc-php-fpm bin/console app:send-notif -i 50
 |make npm build| Build npm dependencies |
 |make rebuild-database| Rebuild database |
 |make test| Execute phpunit tests |
-|make coverage| Generate phpunit coverage report in html |
+|make test-coverage| Generate phpunit coverage report in html |
 |make help | Show list of commande available
 
 
