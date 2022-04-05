@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1649161530">
-  <project timestamp="1649161530">
+<coverage generated="1649161677">
+  <project timestamp="1649161677">
     <file name="/home/runner/work/poc-mercure-messenger/poc-mercure-messenger/src/Command/SendNotificationCommand.php">
       <class name="App\Command\SendNotificationCommand" namespace="global">
         <metrics complexity="4" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="10" elements="13" coveredelements="13"/>
