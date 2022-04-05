@@ -1,6 +1,6 @@
 ![Build status CI workflow](https://github.com/sfinx13/poc-mercure-messenger/actions/workflows/ci.yaml/badge.svg)
 
-![Code Coverage Badge](./badge.svg)
+![Code Coverage Badge](./badge-coverage.svg)
 
 # Asynchronous export with real-time notifications
 > Demo made with mercure and messenger symfony components
