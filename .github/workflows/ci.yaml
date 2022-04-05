@@ -57,11 +57,11 @@ jobs:
       # Tests
       - name: Run unit and functional tests
         run: |
-          XDEBUG_MODE_COVERAGE=coverage php bin/phpunit --stop-on-failure
+          XDEBUG_MODE=coverage php bin/phpunit --coverage-clover clover.xml --stop-on-failure
 
       - name: Generate test coverage badge
-        uses: ./
+        uses: timkrase/phpunit-coverage-badge@v1.2.0
         with:
-          coverage_badge_path: 'badge.svg'
+          coverage_badge_path: 'badge-coverage.svg'
           push_badge: true
           repo_token: ${{ secrets.GITHUB_TOKEN }}
