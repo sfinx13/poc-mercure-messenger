@@ -19,6 +19,6 @@
     },
     "dependencies": {
         "dotenv": "^10.0.0",
-        "event-source-polyfill": "^1.0.24"
+        "event-source-polyfill": "^1.0.31"
     }
 }
